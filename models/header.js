@@ -9,6 +9,9 @@ const HeaderSchema = mongoose.Schema({
     description: {
         type: String
     },
+    role: {
+        type: String
+    },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
@@ -36,4 +39,8 @@ module.exports.deleteHeader = function(headerid, callback){
 
 module.exports.updateHeader = function(headerid, updateResult, callback){
     Header.update({_id: headerid},updateResult, callback);
+};
+
+module.exports.getHeaderById = function(headerid, callback){
+  Header.findById(headerid, callback);
 };

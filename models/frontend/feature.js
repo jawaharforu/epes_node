@@ -45,6 +45,6 @@ module.exports.updateFeature = function(featureid, updateResult, callback){
     Feature.update({_id: featureid},updateResult, callback);
 };
 
-module.exports.gerFeatureById = function(featureid, callback){
+module.exports.getFeatureById = function(featureid, callback){
     Feature.findById(featureid, callback);
 };

@@ -14,6 +14,9 @@ const FaqSchema = mongoose.Schema({
     answer: {
       type: String
     },
+    role: {
+      type: String
+    },
     companyid: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Company',
@@ -48,7 +51,7 @@ module.exports.gerFaqById = function(Faqid, callback){
 };
 
 module.exports.getAllFaqsByCategory = function(faqcategoryid, callback) {
-  Poll.aggregate([
+  Faq.aggregate([
       {
           $match: {
               'faqcategoryid': mongoose.Types.ObjectId(faqcategoryid)

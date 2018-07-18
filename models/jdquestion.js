@@ -10,10 +10,11 @@ const JdquestionSchema = mongoose.Schema({
         ref: 'Jd',
         required: [true,'No Company id found']
     },
-    questionid: [{
+    questionid: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Question'
-    }],
+        ref: 'Question',
+        required: [true,'No Company id found']
+    },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
@@ -41,4 +42,8 @@ module.exports.deleteJdquestion = function(jdquestionid, callback){
 
 module.exports.updateJdquestion = function(jdid, updateResult, callback){
     Jdquestion.update({jdid: jdid},updateResult, callback);
+};
+
+module.exports.getJdquestionById = function(jdquestionid, callback){
+  Jdquestion.findById(jdquestionid, callback);
 };

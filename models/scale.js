@@ -9,6 +9,9 @@ const ScaleSchema = mongoose.Schema({
     options: {
         type: Array
     },
+    role: {
+        type: String
+    },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
@@ -36,4 +39,8 @@ module.exports.deleteScale = function(scaleid, callback){
 
 module.exports.updateScale = function(scaleid, updateResult, callback){
     Scale.update({_id: scaleid},updateResult, callback);
+};
+
+module.exports.getScaleById = function(scaleid, callback){
+  Scale.findById(scaleid, callback);
 };

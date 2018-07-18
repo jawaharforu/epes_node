@@ -10,12 +10,12 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
   let fieldJdquestion = {
     jdid: req.body.jdid,
     questionid: req.body.questionid,
-    companyid: req.body.companyid
+    companyid: req.user.companyid
   };
-  Jdquestion.findOne({jdid: req.body.jdid})
+  Jdquestion.findOne({jdid: req.body.jdid},{questionid: req.body.questionid})
   .then(jdquestion => {
     if(jdquestion) {
-      Jdquestion.updateJdquestion(req.body.jdid, fieldJdquestion, (err, jdquestion) => {
+      Jdquestion.updateJdquestion(jdquestion._id, fieldJdquestion, (err, jdquestion) => {
         if(err) {
           res.json({success: false, msg: 'Failed to update Jdquestion'});
         } else {
@@ -37,6 +37,46 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 
 router.get('/list', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Jdquestion.find({companyid: req.user.companyid})
+  .then(jdquestion => {
+    res.json({success: true, data: jdquestion});
+  })
+  .catch(err => console.log(err));
+});
+
+router.delete('/:jdquestionid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Jdquestion.getJdquestionById(req.params.jdquestion, (err, jdquestion) => {
+    if (jdquestion) {
+      if(jdquestion.companyid.toString() === req.user.companyid.toString()) {
+        Jdquestion.deleteJdquestion(req.params.jdquestion, (err, result) => {
+          if(err){
+            res.json({success: false, msg: 'Failed to delete Scale'});
+          }else{
+            res.json({success: true, msg: 'Scale deleted successfully'});
+          }
+        });
+      } else {
+        res.json({success: false, msg: 'Your not allowed to delete'});
+      }
+    } else {
+      res.json({success: false, msg: 'Scale not found'});
+    }
+  });
+});
+
+router.get('/check/:jdid/:questionid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Jdquestion.findOne({jdid: req.params.jdid},{questionid: req.params.questionid})
+  .then(jdquestion => {
+    if (jdquestion) {
+      res.json({success: true, data: jdquestion});
+    } else {
+      res.json({success: false, data: jdquestion});
+    }
+  })
+  .catch(err => console.log(err));
+});
+
+router.get('/getbyjd/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Jdquestion.find({jdid: req.params.jdid})
   .then(jdquestion => {
     res.json({success: true, data: jdquestion});
   })

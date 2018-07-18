@@ -43,7 +43,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 });
 
 router.delete('/:featureid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Feature.gerFeatureById(req.params.featureid, (err, feature) => {
+  Feature.getFeatureById(req.params.featureid, (err, feature) => {
     if (feature) {
       if(feature.companyid.toString() === req.user.companyid.toString()) {
         Feature.deleteFeature(req.params.featureid, (err, result) => {

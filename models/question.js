@@ -13,13 +13,18 @@ const QuestionSchema = mongoose.Schema({
         ref: 'Scale',
         required: [true,'No scale id found']
     },
-    assessment: {
-        type: String
+    assessmenttypeid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Assessmenttype',
+        required: [true,'No scale id found']
     },
     headerid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Header',
         required: [true,'No header id found']
+    },
+    role: {
+        type: String
     },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,
@@ -48,4 +53,8 @@ module.exports.deleteQuestion = function(questionid, callback){
 
 module.exports.updateQuestion = function(questionid, updateResult, callback){
     Question.update({_id: questionid},updateResult, callback);
+};
+
+module.exports.getQuestionById = function(questionid, callback){
+  Question.findById(questionid, callback);
 };

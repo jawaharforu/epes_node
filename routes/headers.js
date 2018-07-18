@@ -10,7 +10,8 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
   let fieldHeader = {
     headername: req.body.headername,
     description: req.body.description,
-    companyid: req.user.companyid
+    companyid: req.user.companyid,
+    role: req.user.role
   };
 
   if(req.body.headerid) {
@@ -41,4 +42,31 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
   .catch(err => console.log(err));
 });
 
+router.get('/getlist', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Header.find({ $or: [{'companyid': req.user.companyid},{'role' : 'superadmin'}] })
+  .then(scale => {
+    res.json({success: true, data: scale});
+  })
+  .catch(err => console.log(err));
+});
+
+router.delete('/:headerid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Header.getHeaderById(req.params.headerid, (err, header) => {
+    if (header) {
+      if(header.companyid.toString() === req.user.companyid.toString()) {
+        Header.deleteHeader(req.params.headerid, (err, result) => {
+          if(err){
+            res.json({success: false, msg: 'Failed to delete Header'});
+          }else{
+            res.json({success: true, msg: 'Header deleted successfully'});
+          }
+        });
+      } else {
+        res.json({success: false, msg: 'Your not allowed to delete'});
+      }
+    } else {
+      res.json({success: false, msg: 'Header not found'});
+    }
+  });
+});
 module.exports = router;

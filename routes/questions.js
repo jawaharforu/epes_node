@@ -10,11 +10,11 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
   let fieldQuestion = {
     question: req.body.question,
     scaleid: req.body.scaleid,
-    assessment: req.body.assessment,
+    assessmenttypeid: req.body.assessmenttypeid,
     headerid: req.body.headerid,
-    companyid: req.body.companyid
+    companyid: req.user.companyid,
+    role: req.user.role
   };
-
   if(req.body.questionid) {
     Question.updateScale(req.body.questionid, fieldQuestion, (err, scale) => {
       if(err) {
@@ -24,7 +24,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
       }
     });
   } else {
-    Question.addScale(new Question(fieldQuestion), (err, question) => {
+    Question.addQuestion(new Question(fieldQuestion), (err, question) => {
       if(err){
         res.json({success: false, msg: 'Failed to add Question'});
       }else{
@@ -37,12 +37,43 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Question.find({companyid: req.user.companyid})
-  .populate('scale')
-  .populate('header')
+  .populate('scaleid')
+  .populate('assessmenttypeid')
+  .populate('headerid')
   .then(question => {
     res.json({success: true, data: question});
   })
   .catch(err => console.log(err));
 });
 
+router.get('/getlist', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Question.find({ $or: [{'companyid': req.user.companyid},{'role' : 'superadmin'}] })
+  .populate('scaleid')
+  .populate('assessmenttypeid')
+  .populate('headerid')
+  .then(question => {
+    res.json({success: true, data: question});
+  })
+  .catch(err => console.log(err));
+});
+
+router.delete('/:questionid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Question.getScaleById(req.params.questionid, (err, question) => {
+    if (question) {
+      if(question.companyid.toString() === req.user.companyid.toString()) {
+        Question.deleteQuestion(req.params.questionid, (err, result) => {
+          if(err){
+            res.json({success: false, msg: 'Failed to delete Question'});
+          }else{
+            res.json({success: true, msg: 'Question deleted successfully'});
+          }
+        });
+      } else {
+        res.json({success: false, msg: 'Your not allowed to delete'});
+      }
+    } else {
+      res.json({success: false, msg: 'Question not found'});
+    }
+  });
+});
 module.exports = router;

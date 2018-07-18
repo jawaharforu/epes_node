@@ -11,7 +11,8 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
       faqcategoryid: req.body.faqcategoryid,
       question: req.body.question,
       answer: req.body.answer,
-      companyid: req.user.companyid
+      companyid: req.user.companyid,
+      role: req.user.role
   };
 
   if(req.body.faqid) {
@@ -34,7 +35,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 });
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Faq.find()
+  Faq.find().populate('faqcategoryid', ['name'])
   .then(Faq => {
     res.json({success: true, data: Faq});
   })
@@ -42,9 +43,9 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 });
 
 router.delete('/:faqid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Faq.gerFaqById(req.params.faqid, (err, Faq) => {
-    if (Faq) {
-      if(Faq.companyid.toString() === req.user.companyid.toString()) {
+  Faq.gerFaqById(req.params.faqid, (err, faq) => {
+    if (faq) {
+      if(faq.companyid.toString() === req.user.companyid.toString()) {
         Faq.deleteFaq(req.params.faqid, (err, result) => {
           if(err){
             res.json({success: false, msg: 'Failed to delete Faq'});
