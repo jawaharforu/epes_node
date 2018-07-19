@@ -42,9 +42,9 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 });
 
 router.delete('/:productroadmapid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Productroadmap.getProductroadmapById(req.params.productroadmapid, (err, Productroadmap) => {
-    if (Productroadmap) {
-      if(Productroadmap.companyid.toString() === req.user.companyid.toString()) {
+  Productroadmap.getProductroadmapById(req.params.productroadmapid, (err, productroadmap) => {
+    if (productroadmap) {
+      if(productroadmap.companyid.toString() === req.user.companyid.toString()) {
         Productroadmap.deleteProductroadmap(req.params.productroadmapid, (err, result) => {
           if(err){
             res.json({success: false, msg: 'Failed to delete Productroadmap'});
