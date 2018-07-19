@@ -34,20 +34,25 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 
 });
 
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Organogram.find({companyid: req.user.companyid})
+router.get('/:organogramid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  if(req.params.organogramid === 'parent') {
+    var parent = null;
+  } else {
+    var parent = req.params.organogramid;
+  }
+  Organogram.find({$and:[{"companyid":req.user.companyid},{"parentid":parent}]})
   .then(organogram => {
     res.json({success: true, data: organogram});
   })
   .catch(err => console.log(err));
 });
 
-router.get('/:blogid', (req, res, next) => {
-  Blog.gerBlogById(req.params.blogid, (err, blog) => {
-    if (blog) {
-      res.json({success: true, data: blog});
+router.get('/get/:organogramid', (req, res, next) => {
+  Organogram.getOrganogramById(req.params.organogramid, (err, organogram) => {
+    if (organogram) {
+      res.json({success: true, data: organogram});
     } else {
-      res.json({success: false, msg: 'Blog not found'});
+      res.json({success: false, msg: 'Organogram not found'});
     }
   });
 });
@@ -60,6 +65,7 @@ router.delete('/:organogramid', passport.authenticate('jwt', { session: false })
           if(err){
             res.json({success: false, msg: 'Failed to delete Organogram'});
           }else{
+            Organogram.remove({parentid: req.params.organogramid});
             res.json({success: true, msg: 'Organogram deleted successfully'});
           }
         });
@@ -71,4 +77,21 @@ router.delete('/:organogramid', passport.authenticate('jwt', { session: false })
     }
   });
 });
+
+router.get('/getchild/:organogramid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Organogram.find({parentid: req.params.organogramid})
+  .then(organogram => {
+    res.json({success: true, data: organogram});
+  })
+  .catch(err => console.log(err));
+});
+
+router.get('/getlist', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Organogram.find({companyid: req.user.companyid})
+  .then(organogram => {
+    res.json({success: true, data: organogram});
+  })
+  .catch(err => console.log(err));
+});
+
 module.exports = router;
