@@ -14,8 +14,7 @@ const OrganogramSchema = mongoose.Schema({
     },
     parentid: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Organogram',
-        required: [true,'No Organogram id found']
+        ref: 'Organogram'
     },
     level: {
         type: Number
@@ -41,10 +40,14 @@ module.exports.addOrganogram = function(newOrganogram, callback){
     newOrganogram.save(callback);
 };
 
-module.exports.deleteJdquestion = function(organogramid, callback){
+module.exports.deleteOrganogram = function(organogramid, callback){
     Organogram.remove({_id: organogramid}, callback);
 };
 
-module.exports.updateJdquestion = function(organogramid, updateResult, callback){
+module.exports.updateOrganogram = function(organogramid, updateResult, callback){
     Organogram.update({_id: organogramid},updateResult, callback);
+};
+
+module.exports.getOrganogramById = function(organogramid, callback){
+    Organogram.findById(organogramid, callback);
 };

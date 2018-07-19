@@ -44,8 +44,8 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 
 router.get('/getlist', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Header.find({ $or: [{'companyid': req.user.companyid},{'role' : 'superadmin'}] })
-  .then(scale => {
-    res.json({success: true, data: scale});
+  .then(header => {
+    res.json({success: true, data: header});
   })
   .catch(err => console.log(err));
 });

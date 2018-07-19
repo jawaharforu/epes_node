@@ -9,7 +9,7 @@ const Pressrelease = require('../../models/frontend/pressrelease');
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldPressrelease = {
       name: req.body.name,
-      description: req.body.description,
+      image: req.body.image,
       status: req.body.status,
       companyid: req.user.companyid
   };

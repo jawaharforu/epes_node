@@ -36,8 +36,8 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Blog.find()
-  .then(Blog => {
-    res.json({success: true, data: Blog});
+  .then(blog => {
+    res.json({success: true, data: blog});
   })
   .catch(err => console.log(err));
 });
@@ -65,7 +65,7 @@ router.delete('/:blogid', passport.authenticate('jwt', { session: false }), (req
 router.get('/:blogid', (req, res, next) => {
   Blog.gerBlogById(req.params.blogid, (err, blog) => {
     if (blog) {
-      res.json({success: true, data: Blog});
+      res.json({success: true, data: blog});
     } else {
       res.json({success: false, msg: 'Blog not found'});
     }

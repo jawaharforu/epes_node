@@ -31,6 +31,7 @@ const scale = require('./routes/scales');
 const header = require('./routes/headers');
 const assessmenttype = require('./routes/assessmenttypes');
 const jdquestion = require('./routes/jdquestions');
+const organogram = require('./routes/organograms');
 // include fronend router files
 const testimonial = require('./routes/frontend/testimonials');
 const product = require('./routes/frontend/products');
@@ -96,6 +97,7 @@ app.use('/api/headers', header);
 app.use('/api/questions', question);
 app.use('/api/assessmenttypes', assessmenttype);
 app.use('/api/jdquestions', jdquestion);
+app.use('/api/organograms', organogram);
 // frontend path
 app.use('/api/testimonials', testimonial);
 app.use('/api/products', product);

@@ -9,6 +9,15 @@ const PressreleaseSchema = mongoose.Schema({
     image: {
         type: String
     },
+    status: {
+        type: Boolean,
+        default: true
+    },
+    companyid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company',
+        required: [true,'No Company id found']
+    },
     createdon: {
         type: Date,
         default: Date.now

@@ -9,9 +9,9 @@ const Whitepaper = require('../../models/frontend/Whitepaper');
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldWhitepaper = {
       name: req.body.name,
-      description: req.body.description,
-      status: req.body.status,
-      companyid: req.user.companyid
+      email: req.body.email,
+      company: req.body.company,
+      website: req.user.website
   };
 
   if(req.body.whitepaperid) {
