@@ -39,6 +39,6 @@ module.exports.updateWhitepaper = function(Whitepaperid, updateResult, callback)
     Whitepaper.update({_id: Whitepaperid},updateResult, callback);
 };
 
-module.exports.gerWhitepaperById = function(Whitepaperid, callback){
+module.exports.getWhitepaperById = function(Whitepaperid, callback){
     Whitepaper.findById(Whitepaperid, callback);
 };

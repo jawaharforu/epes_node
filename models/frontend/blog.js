@@ -45,6 +45,6 @@ module.exports.updateBlog = function(Blogid, updateResult, callback){
     Blog.update({_id: Blogid},updateResult, callback);
 };
 
-module.exports.gerBlogById = function(Blogid, callback){
+module.exports.getBlogById = function(Blogid, callback){
     Blog.findById(Blogid, callback);
 };

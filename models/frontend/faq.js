@@ -46,7 +46,7 @@ module.exports.updateFaq = function(Faqid, updateResult, callback){
     Faq.update({_id: Faqid},updateResult, callback);
 };
 
-module.exports.gerFaqById = function(Faqid, callback){
+module.exports.getFaqById = function(Faqid, callback){
     Faq.findById(Faqid, callback);
 };
 

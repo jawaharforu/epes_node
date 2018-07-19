@@ -42,6 +42,6 @@ module.exports.updateProductroadmap = function(Productroadmapid, updateResult, c
     Productroadmap.update({_id: Productroadmapid},updateResult, callback);
 };
 
-module.exports.gerProductroadmapById = function(Productroadmapid, callback){
+module.exports.getProductroadmapById = function(Productroadmapid, callback){
     Productroadmap.findById(Productroadmapid, callback);
 };

@@ -43,7 +43,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 });
 
 router.delete('/:faqid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Faq.gerFaqById(req.params.faqid, (err, faq) => {
+  Faq.getFaqById(req.params.faqid, (err, faq) => {
     if (faq) {
       if(faq.companyid.toString() === req.user.companyid.toString()) {
         Faq.deleteFaq(req.params.faqid, (err, result) => {
