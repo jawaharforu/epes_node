@@ -37,6 +37,10 @@ const product = require('./routes/frontend/products');
 const feature = require('./routes/frontend/features');
 const faqcategory = require('./routes/frontend/faqcategories');
 const faq = require('./routes/frontend/faqs');
+const blog = require('./routes/frontend/blogs');
+const productroadmap = require('./routes/frontend/productroadmaps');
+const whitepaper = require('./routes/frontend/whitepapers');
+const pressrelease = require('./routes/frontend/pressreleases');
 
 const port = process.env.PORT || 3000;
 /*
@@ -98,6 +102,10 @@ app.use('/api/products', product);
 app.use('/api/features', feature);
 app.use('/api/faqCategories', faqcategory);
 app.use('/api/faqs', faq);
+app.use('/api/blogs', blog);
+app.use('/api/productroadmaps', productroadmap);
+app.use('/api/whitepapers', whitepaper);
+app.use('/api/pressreleases', pressrelease);
 /*
 app.get('/', cors(corsOptions), (req, res) => {
     res.send('Invalied Endpoing');
