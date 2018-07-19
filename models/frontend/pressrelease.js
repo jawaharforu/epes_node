@@ -42,6 +42,6 @@ module.exports.updatePressrelease = function(Pressreleaseid, updateResult, callb
     Pressrelease.update({_id: Pressreleaseid},updateResult, callback);
 };
 
-module.exports.gerPressreleaseById = function(Pressreleaseid, callback){
+module.exports.getPressreleaseById = function(Pressreleaseid, callback){
     Pressrelease.findById(Pressreleaseid, callback);
 };

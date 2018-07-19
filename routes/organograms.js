@@ -14,7 +14,6 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
     parentid: req.body.parentid,
     companyid: req.user.companyid
   };
-
   if(req.body.organogramid) {
     Organogram.updateOrganogram(req.body.organogramid, fieldOrganogram, (err, organogram) => {
       if(err) {
@@ -41,6 +40,16 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
     res.json({success: true, data: organogram});
   })
   .catch(err => console.log(err));
+});
+
+router.get('/:blogid', (req, res, next) => {
+  Blog.gerBlogById(req.params.blogid, (err, blog) => {
+    if (blog) {
+      res.json({success: true, data: blog});
+    } else {
+      res.json({success: false, msg: 'Blog not found'});
+    }
+  });
 });
 
 router.delete('/:organogramid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
