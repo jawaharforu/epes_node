@@ -63,7 +63,7 @@ router.delete('/:blogid', passport.authenticate('jwt', { session: false }), (req
 });
 
 router.get('/:blogid', (req, res, next) => {
-  Blog.gerBlogById(req.params.blogid, (err, blog) => {
+  Blog.getBlogById(req.params.blogid, (err, blog) => {
     if (blog) {
       res.json({success: true, data: blog});
     } else {
