@@ -62,7 +62,7 @@ router.delete('/:productroadmapid', passport.authenticate('jwt', { session: fals
 });
 
 router.get('/:productroadmapid', (req, res, next) => {
-  Productroadmap.gerProductroadmapById(req.params.productroadmapid, (err, productroadmap) => {
+  Productroadmap.getProductroadmapById(req.params.productroadmapid, (err, productroadmap) => {
     if (productroadmap) {
       res.json({success: true, data: productroadmap});
     } else {

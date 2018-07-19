@@ -62,7 +62,7 @@ router.delete('/:pressreleaseid', passport.authenticate('jwt', { session: false 
 });
 
 router.get('/:pressreleaseid', (req, res, next) => {
-  Pressrelease.gerPressreleaseById(req.params.pressreleaseid, (err, pressrelease) => {
+  Pressrelease.getPressreleaseById(req.params.pressreleaseid, (err, pressrelease) => {
     if (pressrelease) {
       res.json({success: true, data: pressrelease});
     } else {
