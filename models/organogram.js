@@ -13,11 +13,7 @@ const OrganogramSchema = mongoose.Schema({
         type: String
     },
     parentid: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Organogram'
-    },
-    level: {
-        type: Number
+        type: String
     },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,
