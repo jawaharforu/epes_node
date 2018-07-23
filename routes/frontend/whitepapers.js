@@ -11,7 +11,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
       name: req.body.name,
       email: req.body.email,
       company: req.body.company,
-      website: req.user.website,
+      website: req.body.website,
       role: 'superadmin'
   };
 
@@ -45,7 +45,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 router.delete('/:whitepaperid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Whitepaper.getWhitepaperById(req.params.whitepaperid, (err, whitepaper) => {
     if (whitepaper) {
-      if(whitepaper.role.toString() === req.user.role.toString()) {
+      if(whitepaper.role === req.user.role) {
         Whitepaper.deleteWhitepaper(req.params.whitepaperid, (err, result) => {
           if(err){
             res.json({success: false, msg: 'Failed to delete Whitepaper'});
