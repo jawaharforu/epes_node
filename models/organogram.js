@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../config/database');
 const Company = require('./company');
+var autoIncrement = require("mongodb-autoincrement");
 
 const OrganogramSchema = mongoose.Schema({
     name: {
@@ -13,7 +14,12 @@ const OrganogramSchema = mongoose.Schema({
         type: String
     },
     parentid: {
-        type: String
+        type: Number,
+        require: true
+    },
+    uniqueid: {
+        type: Number,
+        require: true
     },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,

@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
 const Organogram = require('../models/Organogram');
+var autoIncrement = require("mongodb-autoincrement");
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldOrganogram = {
@@ -12,6 +13,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
     department: req.body.department,
     designation: req.body.designation,
     parentid: req.body.parentid,
+    uniqueid: (req.body.uniqueid === undefined || req.body.uniqueid === '') ? 1 : req.body.uniqueid,
     companyid: req.user.companyid
   };
   if(req.body.organogramid) {
@@ -23,20 +25,29 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
       }
     });
   } else {
-    Organogram.addOrganogram(new Organogram(fieldOrganogram), (err, organogram) => {
-      if(err){
-        res.json({success: false, msg: 'Failed to add Organogram'});
-      }else{
-        res.json({success: true, msg: 'Organogram Add', data: organogram});
+    Organogram.findOne({companyid: req.user.companyid}).sort({'createdon': -1})
+    .then(organogram => {
+      if (organogram) {
+        fieldOrganogram.uniqueid = (organogram.uniqueid === undefined || organogram.uniqueid === '') ? 1 : (organogram.uniqueid + 1);
+      } else {
+        fieldOrganogram.uniqueid = 1;
       }
-    });
+      Organogram.addOrganogram(new Organogram(fieldOrganogram), (err, organogram) => {
+        if(err){
+          res.json({success: false, msg: 'Failed to add Organogram'});
+        }else{
+          res.json({success: true, msg: 'Organogram Add', data: organogram});
+        }
+      });
+    })
+    .catch(err => console.log(err));
   }
 
 });
 
 router.get('/:organogramid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  if(req.params.organogramid === 'parent') {
-    var parent = "parent";
+  if(req.params.organogramid === 0) {
+    var parent = 0;
   } else {
     var parent = req.params.organogramid.toString();
   }
@@ -65,7 +76,7 @@ router.delete('/:organogramid', passport.authenticate('jwt', { session: false })
           if(err){
             res.json({success: false, msg: 'Failed to delete Organogram'});
           }else{
-            Organogram.remove({parentid: req.params.organogramid});
+            Organogram.remove({parentid: organogram.uniqueid});
             res.json({success: true, msg: 'Organogram deleted successfully'});
           }
         });
@@ -78,8 +89,8 @@ router.delete('/:organogramid', passport.authenticate('jwt', { session: false })
   });
 });
 
-router.get('/getchild/:organogramid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Organogram.find({parentid: req.params.organogramid.toString()})
+router.get('/getchild/:uniqueid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Organogram.find({parentid: req.params.uniqueid})
   .then(organogram => {
     res.json({success: true, data: organogram});
   })
@@ -89,17 +100,14 @@ router.get('/getchild/:organogramid', passport.authenticate('jwt', { session: fa
 router.get('/getfull/list', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Organogram.find({companyid: req.user.companyid})
   .then(organogram => {
-    //res.json({success: true, data: organogram});
     var t = [];
     var ids = [];
     for (var i = 0; i < organogram.length; i++) {
-      ids.push(organogram[i]._id);
-      t[organogram[i]._id] = organogram[i].parentid;
-      if ( i === (organogram.length - 1) ) {
-        //func(t, 'parent', ids);
-        console.log(t);
-        res.json(func(t, 'parent', ids));
-      }
+        t[organogram[i].uniqueid] = organogram[i].parentid;
+        ids[organogram[i].uniqueid] = organogram[i];
+        if (i === (organogram.length - 1)) {
+          res.json({success: true, data: func(t, 0, ids)});
+        }
     }
   })
   .catch(err => console.log(err));
@@ -108,63 +116,16 @@ router.get('/getfull/list', passport.authenticate('jwt', { session: false }), (r
 function func(t, c, ids) {
   // https://stackoverflow.com/questions/36810428/building-multi-level-menu-using-nodejs
   var a = [];
-  for (var i = 0; i < ids.length; i++) {
-    console.log('t=',t[ids[i]]);
-    console.log('c=',c);
-      if (t[ids[i]] === c) {
-          a.push({
-              id: ids[i],
-              sub: func(t, ids[i], ids)
-          });
-      }
-  }
-  return a;
-}
-
-router.get('/getfull/list1', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  var nodes = [
-    { id: 1, parent: 0 },
-    { id: 2, parent: 0 },
-    { id: 3, parent: 1 },
-    { id: 4, parent: 1 },
-    { id: 5, parent: 2 },
-    { id: 6, parent: 2 },
-    { id: 7, parent: 2 },
-    { id: 30, parent: 3 },
-    { id: 31, parent: 3 },
-    { id: 70, parent: 7 },
-    { id: 71, parent: 7 }
-];
-var t = [];
-for (var i = 0; i < nodes.length; i++) {
-
-    t[nodes[i].id] = nodes[i].parent;
-    console.log(t);
-}
-
-res.json({success: true, data: f(t, 0)});
-});
-
-function f(t, c) {
-  //console.log(t.length);
-  // The output structure
-  var a = [];
-
-  // We loop through all the nodes to fill `a`
   for (var i = 0; i < t.length; i++) {
-      // If the node has the parent `c`
       if (t[i] === c) {
-          // Create an object with the `id` and `sub` properties and push it
-          // to the `a` array
           a.push({
-              id: i,
-              // The `sub` property's value is generated recursively
-              sub: f(t, i)
+              name: ids[i].name,
+              designation: ids[i].designation,
+              subordinates: func(t, i, ids)
           });
       }
   }
-
-  // Finish by returning the `a` array
   return a;
 }
+
 module.exports = router;
