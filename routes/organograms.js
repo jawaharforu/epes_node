@@ -87,9 +87,44 @@ router.get('/getchild/:organogramid', passport.authenticate('jwt', { session: fa
 });
 
 router.get('/getfull/list', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Organogram.find({companyid: req.user.companyid})
+  .then(organogram => {
+    //res.json({success: true, data: organogram});
+    var t = [];
+    var ids = [];
+    for (var i = 0; i < organogram.length; i++) {
+      ids.push(organogram[i]._id);
+      t[organogram[i]._id] = organogram[i].parentid;
+      if ( i === (organogram.length - 1) ) {
+        //func(t, 'parent', ids);
+        console.log(t);
+        res.json(func(t, 'parent', ids));
+      }
+    }
+  })
+  .catch(err => console.log(err));
+});
+
+function func(t, c, ids) {
+  // https://stackoverflow.com/questions/36810428/building-multi-level-menu-using-nodejs
+  var a = [];
+  for (var i = 0; i < ids.length; i++) {
+    console.log('t=',t[ids[i]]);
+    console.log('c=',c);
+      if (t[ids[i]] === c) {
+          a.push({
+              id: ids[i],
+              sub: func(t, ids[i], ids)
+          });
+      }
+  }
+  return a;
+}
+
+router.get('/getfull/list1', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   var nodes = [
-    { id: 1, parent: 'parent' },
-    { id: 2, parent: 'parent' },
+    { id: 1, parent: 0 },
+    { id: 2, parent: 0 },
     { id: 3, parent: 1 },
     { id: 4, parent: 1 },
     { id: 5, parent: 2 },
@@ -99,26 +134,37 @@ router.get('/getfull/list', passport.authenticate('jwt', { session: false }), (r
     { id: 31, parent: 3 },
     { id: 70, parent: 7 },
     { id: 71, parent: 7 }
-  ];
-  var t = [];
-  for (var i = 0; i < nodes.length; i++) {
+];
+var t = [];
+for (var i = 0; i < nodes.length; i++) {
+
     t[nodes[i].id] = nodes[i].parent;
-  }
-  console.log(t);
-  res.json(func(t, 'parent'));
+    console.log(t);
+}
+
+res.json({success: true, data: f(t, 0)});
 });
 
-function func(t, c) {
-  // https://stackoverflow.com/questions/36810428/building-multi-level-menu-using-nodejs
+function f(t, c) {
+  //console.log(t.length);
+  // The output structure
   var a = [];
+
+  // We loop through all the nodes to fill `a`
   for (var i = 0; i < t.length; i++) {
+      // If the node has the parent `c`
       if (t[i] === c) {
+          // Create an object with the `id` and `sub` properties and push it
+          // to the `a` array
           a.push({
               id: i,
-              sub: func(t, i)
+              // The `sub` property's value is generated recursively
+              sub: f(t, i)
           });
       }
   }
+
+  // Finish by returning the `a` array
   return a;
 }
 module.exports = router;

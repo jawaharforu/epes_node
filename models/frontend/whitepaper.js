@@ -15,6 +15,9 @@ const WhitepaperSchema = mongoose.Schema({
     website: {
         type: String
     },
+    role: {
+        type: String
+    },
     createdon: {
         type: Date,
         default: Date.now
