@@ -4,8 +4,8 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
-const Organogram = require('../models/Organogram');
-var autoIncrement = require("mongodb-autoincrement");
+const Organogram = require('../models/organogram');
+// var autoIncrement = require("mongodb-autoincrement");
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldOrganogram = {
