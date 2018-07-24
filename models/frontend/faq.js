@@ -8,6 +8,11 @@ const FaqSchema = mongoose.Schema({
       ref: 'Faqcategory',
       required: [true,'No Faq category id found']
     },
+    faqsubcategoryid: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Faqsubcategory',
+      required: [true,'No Faq sub category id found']
+    },
     question: {
       type: String
     },
@@ -50,19 +55,11 @@ module.exports.getFaqById = function(Faqid, callback){
     Faq.findById(Faqid, callback);
 };
 
-module.exports.getAllFaqsByCategory = function(faqcategoryid, callback) {
+module.exports.getAllFaqsByCategory = function(faqsubcategoryid, callback) {
   Faq.aggregate([
       {
           $match: {
-              'faqcategoryid': mongoose.Types.ObjectId(faqcategoryid)
-          }
-      },
-      {
-          $lookup: {
-              from: 'Faqcategories',
-              localField: 'faqcategoryid',
-              foreignField: '_id',
-              as: 'categoryname'
+              'faqsubcategoryid': mongoose.Types.ObjectId(faqsubcategoryid)
           }
       },
       { $sort: { createdon: -1 } }

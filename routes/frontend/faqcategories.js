@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../../config/database');
 
 const Faqcategory = require('../../models/frontend/faqcategory');
+const Faqsubcategory = require('../../models/frontend/faqsubcategory');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldFaqcategory = {
@@ -58,6 +59,29 @@ router.delete('/:faqcategoryid', passport.authenticate('jwt', { session: false }
       res.json({success: false, msg: 'Faq category not found'});
     }
   });
+});
+
+router.get('/get/sub', (req, res, next) => {
+  Faqcategory.find()
+  .then(faqcategory => {
+    var f = [];
+    var i = 1;
+    faqcategory.forEach(element => {
+      Faqsubcategory.find({faqcategoryid: element._id})
+      .then(faqsubcategory => {
+        if (faqsubcategory) {
+          f[element._id] = faqsubcategory;
+        }
+        if(i === faqcategory.length) {
+          console.log(f);
+          res.json({success: true, data: f});
+        }
+        i++;
+      })
+      .catch(err => console.log(err));
+    });
+  })
+  .catch(err => console.log(err));
 });
 
 module.exports = router;

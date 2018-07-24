@@ -9,6 +9,7 @@ const Faq = require('../../models/frontend/faq');
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldFaq = {
       faqcategoryid: req.body.faqcategoryid,
+      faqsubcategoryid: req.body.faqsubcategoryid,
       question: req.body.question,
       answer: req.body.answer,
       companyid: req.user.companyid,
@@ -34,8 +35,10 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
   }
 });
 
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Faq.find().populate('faqcategoryid', ['name'])
+router.get('/', (req, res, next) => {
+  Faq.find()
+  .populate('faqcategoryid')
+  .populate('faqsubcategoryid')
   .then(Faq => {
     res.json({success: true, data: Faq});
   })
@@ -73,13 +76,13 @@ router.get('/:faqid', (req, res, next) => {
 });
 
 router.get('/category/:faqcategoryid', (req, res) => {
-  Faq.getAllFaqsByCategory(req.params.faqcategoryid, (err, Faq) => {
-    if (Faq) {
-      res.json({success: true, data: Faq});
-    } else {
-      res.json({success: false, msg: 'Faq not found'});
-    }
-  });
+  Faq.find({faqsubcategoryid: req.params.faqcategoryid})
+  .populate('faqcategoryid')
+  .populate('faqsubcategoryid')
+  .then(Faq => {
+    res.json({success: true, data: Faq});
+  })
+  .catch(err => console.log(err));
 });
 
 module.exports = router;
