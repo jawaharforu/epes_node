@@ -43,6 +43,7 @@ const blog = require('./routes/frontend/blogs');
 const productroadmap = require('./routes/frontend/productroadmaps');
 const whitepaper = require('./routes/frontend/whitepapers');
 const pressrelease = require('./routes/frontend/pressreleases');
+const career = require('./routes/frontend/careers');
 
 const port = process.env.PORT || 3000;
 /*
@@ -109,6 +110,7 @@ app.use('/api/blogs', blog);
 app.use('/api/productroadmaps', productroadmap);
 app.use('/api/whitepapers', whitepaper);
 app.use('/api/pressreleases', pressrelease);
+app.use('/api/careers', career);
 /*
 app.get('/', cors(corsOptions), (req, res) => {
     res.send('Invalied Endpoing');
