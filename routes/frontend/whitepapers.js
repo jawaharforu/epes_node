@@ -4,7 +4,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../../config/database');
 
-const Whitepaper = require('../../models/frontend/Whitepaper');
+const Whitepaper = require('../../models/frontend/whitepaper');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldWhitepaper = {
