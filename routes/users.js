@@ -14,6 +14,7 @@ router.post('/', (req, res, next) => {
     let fieldUser = {
         companyid: req.body.companyid,
         firstname: req.body.firstname,
+        middlename: req.body.middlename,
         lastname: req.body.lastname,
         email: req.body.email,
         password: req.body.password,

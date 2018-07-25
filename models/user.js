@@ -13,6 +13,9 @@ const UserSchema = mongoose.Schema({
     firstname: {
         type: String
     },
+    middlename: {
+        type: String
+    },
     lastname: {
         type: String
     },

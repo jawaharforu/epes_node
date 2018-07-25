@@ -32,6 +32,8 @@ const header = require('./routes/headers');
 const assessmenttype = require('./routes/assessmenttypes');
 const jdquestion = require('./routes/jdquestions');
 const organogram = require('./routes/organograms');
+const department = require('./routes/departments');
+const subdepartment = require('./routes/subdepartments');
 
 // include fronend router files
 const testimonial = require('./routes/frontend/testimonials');
@@ -104,6 +106,8 @@ app.use('/api/questions', question);
 app.use('/api/assessmenttypes', assessmenttype);
 app.use('/api/jdquestions', jdquestion);
 app.use('/api/organograms', organogram);
+app.use('/api/departments', department);
+app.use('/api/subdepartments', subdepartment);
 // frontend path
 app.use('/api/testimonials', testimonial);
 app.use('/api/products', product);

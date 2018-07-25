@@ -35,6 +35,6 @@ module.exports.updateFaqcategory = function(faqcategoryid, updateResult, callbac
     Faqcategory.update({_id: faqcategoryid},updateResult, callback);
 };
 
-module.exports.gerFaqcategoryById = function(faqcategoryid, callback){
+module.exports.getFaqcategoryById = function(faqcategoryid, callback){
     Faqcategory.findById(faqcategoryid, callback);
 };

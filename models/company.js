@@ -12,7 +12,7 @@ const CompanySchema = mongoose.Schema({
         type: String
     },
     noofemployees: {
-        type: Number
+        type: String
     },
     companycontact: {
         type: String
