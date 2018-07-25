@@ -47,6 +47,8 @@ const pressrelease = require('./routes/frontend/pressreleases');
 const career = require('./routes/frontend/careers');
 const contact = require('./routes/frontend/contacts');
 
+const common = require('./routes/frontend/commons');
+
 const port = process.env.PORT || 3000;
 /*
 var options = {
@@ -115,6 +117,7 @@ app.use('/api/whitepapers', whitepaper);
 app.use('/api/pressreleases', pressrelease);
 app.use('/api/careers', career);
 app.use('/api/contacts', contact);
+app.use('/api/commons', common);
 /*
 app.get('/', cors(corsOptions), (req, res) => {
     res.send('Invalied Endpoing');
