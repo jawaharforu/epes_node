@@ -10,7 +10,7 @@ const User = require('../models/user');
 router.post('/', (req, res, next) => {
   let fieldCompany = {
       jobtitle: req.body.jobtitle,
-      compnayname: req.body.compnayname,
+      companyname: req.body.companyname,
       industry: req.body.industry,
       noofemployees: req.body.noofemployees,
       companycontact: req.body.companycontact,
@@ -38,6 +38,52 @@ router.post('/', (req, res, next) => {
       }
     });
   }
+});
+
+router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  if(req.user.role === 'superadmin') {
+    Company.find()
+    .then(company => {
+      res.json({success: true, data: company});
+    })
+    .catch(err => console.log(err));
+  } else {
+    res.json({success: false, data: 'Your not allowed'});
+  }
+});
+
+router.delete('/:companyid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Company.getCompanyById(req.params.companyid, (err, company) => {
+    if (company) {
+      if(req.user.role === 'superadmin') {
+        Company.deleteCompany(req.params.companyid, (err, result) => {
+          if(err){
+            res.json({success: false, msg: 'Failed to delete Company'});
+          }else{
+            res.json({success: true, msg: 'Company deleted successfully'});
+          }
+        });
+      } else {
+        res.json({success: false, msg: 'Your not allowed to delete'});
+      }
+    } else {
+      res.json({success: false, msg: 'Company not found'});
+    }
+  });
+});
+
+router.get('/:companyid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Company.getCompanyById(req.params.companyid, (err, company) => {
+    if (company) {
+      if(req.user.role === 'superadmin' || company._id.toString() === req.user.companyid.toString()) {
+        res.json({success: true, data: company});
+      } else {
+        res.json({success: false, msg: 'Your not allowed to delete'});
+      }
+    } else {
+      res.json({success: false, msg: 'Company not found'});
+    }
+  });
 });
 
 module.exports = router;

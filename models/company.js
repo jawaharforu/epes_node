@@ -5,7 +5,7 @@ const CompanySchema = mongoose.Schema({
     jobtitle: {
         type: String
     },
-    compnayname: {
+    companyname: {
         type: String
     },
     industry: {
@@ -56,3 +56,6 @@ module.exports.updateCompany = function(companyid, updateResult, callback){
     Company.update({_id: companyid},updateResult, callback);
 };
 
+module.exports.getCompanyById = function(companyid, callback){
+    Company.findById(companyid, callback);
+};

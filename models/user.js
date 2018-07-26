@@ -111,3 +111,7 @@ module.exports.updateUserPassword = function(uid, updatedProduct, callback){
         });
     });
 };
+
+module.exports.getUserById = function(uid, callback){
+  Company.findById(uid, callback);
+};

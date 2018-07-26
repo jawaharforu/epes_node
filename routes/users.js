@@ -22,8 +22,8 @@ router.post('/', (req, res, next) => {
         subscribe: req.body.subscribe,
         status: req.body.status
     };
-    if(req.body.userId) {
-      User.updateUser(req.body.userId, fieldUser, (err, user) => {
+    if(req.body.userid) {
+      User.updateUser(req.body.userid, fieldUser, (err, user) => {
         if(err){
             res.json({success: false, msg: 'Falied to register new user'});
         }else{
@@ -128,6 +128,7 @@ router.get(
       id: req.user.id,
       companyid: req.user.companyid,
       firstname: req.user.firstname,
+      middlename: req.user.middlename,
       lastname: req.user.lastname,
       email: req.user.email,
       role: req.user.role,
@@ -136,5 +137,52 @@ router.get(
     });
   }
 );
+
+router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  if(req.user.role === 'superadmin') {
+    User.find()
+    .populate('companyid')
+    .then(user => {
+      res.json({success: true, data: user});
+    })
+    .catch(err => console.log(err));
+  } else {
+    res.json({success: false, data: 'Your not allowed'});
+  }
+});
+
+router.delete('/:userid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  User.getUserById(req.params.userid, (err, user) => {
+    if (user) {
+      if(req.user.role === 'superadmin') {
+        User.deleteUser(req.params.userid, (err, result) => {
+          if(err){
+            res.json({success: false, msg: 'Failed to delete User'});
+          }else{
+            res.json({success: true, msg: 'User deleted successfully'});
+          }
+        });
+      } else {
+        res.json({success: false, msg: 'Your not allowed to delete'});
+      }
+    } else {
+      res.json({success: false, msg: 'User not found'});
+    }
+  });
+});
+
+router.get('/:userid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  User.getUserById(req.params.userid, (err, user) => {
+    if (user) {
+      if(req.user.role === 'superadmin' || user.companyid.toString() === req.user.companyid.toString()) {
+        res.json({success: true, data: user});
+      } else {
+        res.json({success: false, msg: 'Your not allowed to delete'});
+      }
+    } else {
+      res.json({success: false, msg: 'Company not found'});
+    }
+  });
+});
 
 module.exports = router;

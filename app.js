@@ -34,6 +34,7 @@ const jdquestion = require('./routes/jdquestions');
 const organogram = require('./routes/organograms');
 const department = require('./routes/departments');
 const subdepartment = require('./routes/subdepartments');
+const producttour = require('./routes/producttours');
 
 // include fronend router files
 const testimonial = require('./routes/frontend/testimonials');
@@ -108,6 +109,7 @@ app.use('/api/jdquestions', jdquestion);
 app.use('/api/organograms', organogram);
 app.use('/api/departments', department);
 app.use('/api/subdepartments', subdepartment);
+app.use('/api/producttours', producttour);
 // frontend path
 app.use('/api/testimonials', testimonial);
 app.use('/api/products', product);
