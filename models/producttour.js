@@ -18,6 +18,9 @@ const ProducttourSchema = mongoose.Schema({
     noofemployees: {
         type: String
     },
+    countrycode: {
+      type: String
+    },
     contact: {
         type: String
     },

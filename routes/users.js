@@ -103,18 +103,8 @@ router.post('/authendicate', (req, res, next) => {
 });
 
 // check user by email or id
-router.post('/checkuser/:touser', (req, res, next) => {
-  let getUser = {};
-  if(req.params.touser === 'email') {
-    getUser = {
-      email: req.body.value
-    };
-  } else {
-    getUser = {
-      _id: req.body.value
-    };
-  }
-  User.findOne({getUser}).then(user => {
+router.post('/checkuser/email', (req, res, next) => {
+  User.findOne({email: req.body.email}).then(user => {
     if(!user){
       res.json({success:false, msg: "User not found"});
     }else{
