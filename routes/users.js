@@ -58,47 +58,47 @@ router.post('/authendicate', (req, res, next) => {
     User.getUserByEmailCheck(email, (err, user) => {
         if(err) throw err;
         if(!user){
-            res.json({success:false, msg: "User not found"});
+          res.json({success:false, msg: "User not found"});
+        } else {
+          User.ComparePassword(password, user.password, (err, isMatch) => {
+              if(err) throw err;
+              if(isMatch){
+                  //console.log(user);
+                  let userDetail = {
+                      id: user._id,
+                      companyid: user.companyid,
+                      firstname: user.firstname,
+                      lastname: user.lastname,
+                      mobile: user.mobile,
+                      email: user.email,
+                      role: user.role,
+                      subscribe: user.subscribe,
+                      password: user.password
+                  };
+                  const token = jwt.sign(userDetail, config.secret, {
+                      expiresIn: 604800 // 1 week
+                  });
+
+                  res.json({
+                      success: true,
+                      token: 'JWT '+token,
+                      user: {
+                          id: user._id,
+                          companyid: user.companyid,
+                          firstname: user.firstname,
+                          lastname: user.lastname,
+                          mobile: user.mobile,
+                          email: user.email,
+                          role: user.role,
+                          subscribe: user.subscribe,
+                          password: user.password
+                      }
+                  });
+              }else{
+                  res.json({success:false, msg: "Password not match"});
+              }
+          });
         }
-
-        User.ComparePassword(password, user.password, (err, isMatch) => {
-            if(err) throw err;
-            if(isMatch){
-                //console.log(user);
-                let userDetail = {
-                    id: user._id,
-                    companyid: user.companyid,
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    mobile: user.mobile,
-                    email: user.email,
-                    role: user.role,
-                    subscribe: user.subscribe,
-                    password: user.password
-                };
-                const token = jwt.sign(userDetail, config.secret, {
-                    expiresIn: 604800 // 1 week
-                });
-
-                res.json({
-                    success: true,
-                    token: 'JWT '+token,
-                    user: {
-                        id: user._id,
-                        companyid: user.companyid,
-                        firstname: user.firstname,
-                        lastname: user.lastname,
-                        mobile: user.mobile,
-                        email: user.email,
-                        role: user.role,
-                        subscribe: user.subscribe,
-                        password: user.password
-                    }
-                });
-            }else{
-                res.json({success:false, msg: "Password not match"});
-            }
-        });
     });
 });
 
