@@ -85,4 +85,14 @@ router.get('/category/:faqcategoryid', (req, res) => {
   .catch(err => console.log(err));
 });
 
+router.get('/maincategory/:faqcategoryid', (req, res) => {
+  Faq.find({faqcategoryid: req.params.faqcategoryid})
+  .populate('faqcategoryid')
+  .populate('faqsubcategoryid')
+  .then(Faq => {
+    res.json({success: true, data: Faq});
+  })
+  .catch(err => console.log(err));
+});
+
 module.exports = router;
