@@ -16,6 +16,7 @@ router.post('/', (req, res, next) => {
         firstname: req.body.firstname,
         middlename: req.body.middlename,
         lastname: req.body.lastname,
+        mobile: req.body.mobile,
         email: req.body.email,
         password: req.body.password,
         role: req.body.role,
@@ -35,14 +36,15 @@ router.post('/', (req, res, next) => {
         if(err) throw err;
         if(users){
             res.json({success:false, msg: "User email aleady exist"});
+        } else {
+          User.addUser(new User(fieldUser), (err, user) => {
+              if(err){
+                  res.json({success: false, msg: 'Falied to register new user'});
+              }else{
+                  res.json({success: true, msg: 'User registred', data: user});
+              }
+          });
         }
-        User.addUser(new User(fieldUser), (err, user) => {
-            if(err){
-                res.json({success: false, msg: 'Falied to register new user'});
-            }else{
-                res.json({success: true, msg: 'User registred', data: user});
-            }
-        });
       });
     }
 });
@@ -68,6 +70,7 @@ router.post('/authendicate', (req, res, next) => {
                     companyid: user.companyid,
                     firstname: user.firstname,
                     lastname: user.lastname,
+                    mobile: user.mobile,
                     email: user.email,
                     role: user.role,
                     subscribe: user.subscribe,
@@ -85,6 +88,7 @@ router.post('/authendicate', (req, res, next) => {
                         companyid: user.companyid,
                         firstname: user.firstname,
                         lastname: user.lastname,
+                        mobile: user.mobile,
                         email: user.email,
                         role: user.role,
                         subscribe: user.subscribe,
@@ -107,7 +111,7 @@ router.post('/checkuser/:touser', (req, res, next) => {
     };
   } else {
     getUser = {
-      id: req.body.value
+      _id: req.body.value
     };
   }
   User.findOne({getUser}).then(user => {
@@ -130,6 +134,7 @@ router.get(
       firstname: req.user.firstname,
       middlename: req.user.middlename,
       lastname: req.user.lastname,
+      mobile: req.user.mobile,
       email: req.user.email,
       role: req.user.role,
       subscribe: req.user.subscribe,

@@ -19,6 +19,9 @@ const UserSchema = mongoose.Schema({
     lastname: {
         type: String
     },
+    mobile: {
+        type: String
+    },
     email: {
         type: String,
         require: true
@@ -33,7 +36,7 @@ const UserSchema = mongoose.Schema({
     },
     subscribe: {
         type: Number,
-        default: 10
+        default: 0
     },
     superadmin: {
         type: Number,

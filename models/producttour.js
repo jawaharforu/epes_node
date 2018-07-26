@@ -21,6 +21,9 @@ const ProducttourSchema = mongoose.Schema({
     contact: {
         type: String
     },
+    company: {
+        type: String
+    },
     country: {
         type: String
     },

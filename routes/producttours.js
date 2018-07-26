@@ -13,6 +13,7 @@ router.post('/', (req, res, next) => {
       industry: req.body.industry,
       email: req.body.email,
       noofemployees: req.body.noofemployees,
+      company: req.body.company,
       contact: req.body.contact,
       country: req.body.country,
       status: req.body.status
