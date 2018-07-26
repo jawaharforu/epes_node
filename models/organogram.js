@@ -7,8 +7,14 @@ const OrganogramSchema = mongoose.Schema({
     name: {
         type: String
     },
-    department: {
-        type: String
+    departmentid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Department',
+        required: [true,'No Company id found']
+    },
+    subdepartmentid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subdepartment'
     },
     designation: {
         type: String

@@ -10,7 +10,8 @@ const Organogram = require('../models/organogram');
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldOrganogram = {
     name: req.body.name,
-    department: req.body.department,
+    departmentid: req.body.departmentid,
+    subdepartmentid: req.body.subdepartmentid,
     designation: req.body.designation,
     parentid: req.body.parentid,
     uniqueid: (req.body.uniqueid === undefined || req.body.uniqueid === '') ? 1 : req.body.uniqueid,
@@ -25,7 +26,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
       }
     });
   } else {
-    Organogram.findOne({companyid: req.user.companyid}).sort({'createdon': -1})
+    Organogram.findOne().sort({'createdon': -1})
     .then(organogram => {
       if (organogram) {
         fieldOrganogram.uniqueid = (organogram.uniqueid === undefined || organogram.uniqueid === '') ? 1 : (organogram.uniqueid + 1);
@@ -76,7 +77,7 @@ router.delete('/:organogramid', passport.authenticate('jwt', { session: false })
           if(err){
             res.json({success: false, msg: 'Failed to delete Organogram'});
           }else{
-            Organogram.remove({parentid: organogram.uniqueid});
+            Organogram.remove({$and:[{"companyid":req.user.companyid},{"parentid":organogram.uniqueid}]});
             res.json({success: true, msg: 'Organogram deleted successfully'});
           }
         });

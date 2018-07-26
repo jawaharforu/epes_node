@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 const config = require('../config/database');
 const Company = require('./company');
 
-const SubdepatmentSchema = mongoose.Schema({
+const SubdepartmentSchema = mongoose.Schema({
     name: {
         type: String
     },
     departmentid: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Depatment',
+      ref: 'Department',
       required: [true,'No Depatment id found']
     },
     companyid: {
@@ -29,20 +29,20 @@ const SubdepatmentSchema = mongoose.Schema({
     }
 });
 
-const Subdepatment = module.exports = mongoose.model('Subdepatment', SubdepatmentSchema);
+const Subdepartment = module.exports = mongoose.model('Subdepartment', SubdepartmentSchema);
 
-module.exports.addSubdepatment = function(newSubdepatment, callback){
-    newSubdepatment.save(callback);
+module.exports.addSubdepartment = function(newSubdepartment, callback){
+    newSubdepartment.save(callback);
 };
 
-module.exports.deleteSubdepatment = function(Subdepatmentid, callback){
-    Subdepatment.remove({_id: Subdepatmentid}, callback);
+module.exports.deleteSubdepartment = function(Subdepartmentid, callback){
+    Subdepartment.remove({_id: Subdepartmentid}, callback);
 };
 
-module.exports.updateSubdepatment = function(Subdepatmentid, updateResult, callback){
-    Subdepatment.update({_id: Subdepatmentid},updateResult, callback);
+module.exports.updateSubdepartment = function(Subdepartmentid, updateResult, callback){
+    Subdepartment.update({_id: Subdepartmentid},updateResult, callback);
 };
 
-module.exports.gerSubdepatmentById = function(Subdepatmentid, callback){
-    Subdepatment.findById(Subdepatmentid, callback);
+module.exports.getSubdepartmentById = function(Subdepartmentid, callback){
+    Subdepartment.findById(Subdepartmentid, callback);
 };

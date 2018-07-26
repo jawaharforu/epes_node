@@ -4,30 +4,30 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
-const Subdepatment = require('../models/subdepartment');
+const Subdepartment = require('../models/subdepartment');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  let fieldSubdepatment = {
+  let fieldSubdepartment = {
       name: req.body.name,
       departmentid: req.body.departmentid,
       companyid: req.user.companyid,
       role: req.user.role
   };
 
-  if(req.body.subdepatmentid) {
-    Subdepatment.updateSubdepatment(req.body.subdepatmentid, fieldSubdepatment, (err, subdepatment) => {
+  if(req.body.subdepartmentid) {
+    Subdepartment.updateSubdepartment(req.body.subdepartmentid, fieldSubdepartment, (err, subdepatment) => {
       if(err) {
-        res.json({success: false, msg: 'Failed to update Faq sub category'});
+        res.json({success: false, msg: 'Failed to update Sub department'});
       } else {
-        res.json({success: true, msg: 'Faq sub category Updated'});
+        res.json({success: true, msg: 'Sub department Updated'});
       }
     });
   } else {
-    Subdepatment.addSubdepatment(new Subdepatment(fieldSubdepatment), (err, subdepatment) => {
+    Subdepartment.addSubdepartment(new Subdepartment(fieldSubdepartment), (err, subdepartment) => {
       if(err){
-        res.json({success: false, msg: 'Failed to add Faq sub category'});
+        res.json({success: false, msg: 'Failed to add Sub department'});
       }else{
-          res.json({success: true, msg: 'Faq sub category Add', data: subdepatment});
+          res.json({success: true, msg: 'Sub department Add', data: subdepartment});
       }
     });
   }
@@ -35,39 +35,39 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 });
 
 router.get('/', (req, res, next) => {
-  Subdepatment.find()
+  Subdepartment.find()
   .populate('departmentid')
-  .then(subdepatment => {
-    res.json({success: true, data: subdepatment});
+  .then(subdepartment => {
+    res.json({success: true, data: subdepartment});
   })
   .catch(err => console.log(err));
 });
 
-router.delete('/:subdepatmentid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Subdepatment.gerFaqcategoryById(req.params.subdepatmentid, (err, subdepatment) => {
-    if (subdepatment) {
-      if(subdepatment.companyid.toString() === req.user.companyid.toString()) {
-        Subdepatment.deleteSubdepatment(req.params.subdepatmentid, (err, result) => {
+router.delete('/:subdepartmentid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Subdepartment.getSubdepartmentById(req.params.subdepartmentid, (err, subdepartment) => {
+    if (subdepartment) {
+      if(subdepartment.companyid.toString() === req.user.companyid.toString()) {
+        Subdepartment.deleteSubdepartment(req.params.subdepartmentid, (err, result) => {
           if(err){
-            res.json({success: false, msg: 'Failed to delete Faq sub category'});
+            res.json({success: false, msg: 'Failed to delete Sub department'});
           }else{
-            res.json({success: true, msg: 'Faq sub category deleted successfully'});
+            res.json({success: true, msg: 'Sub department deleted successfully'});
           }
         });
       } else {
         res.json({success: false, msg: 'Your not allowed to delete'});
       }
     } else {
-      res.json({success: false, msg: 'Faq sub category not found'});
+      res.json({success: false, msg: 'Sub department not found'});
     }
   });
 });
 
 router.get('/list/:departmentid', (req, res, next) => {
-  Subdepatment.find({departmentid: req.params.departmentid})
+  Subdepartment.find({departmentid: req.params.departmentid})
   .populate('departmentid')
-  .then(subdepatment => {
-    res.json({success: true, data: subdepatment});
+  .then(subdepartment => {
+    res.json({success: true, data: subdepartment});
   })
   .catch(err => console.log(err));
 });
