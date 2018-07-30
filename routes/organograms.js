@@ -121,7 +121,6 @@ function func(t, c, ids) {
       if (t[i] === c) {
           a.push({
               name: ids[i].name,
-              designation: ids[i].designation,
               subordinates: func(t, i, ids)
           });
       }
