@@ -35,6 +35,12 @@ const organogram = require('./routes/organograms');
 const department = require('./routes/departments');
 const subdepartment = require('./routes/subdepartments');
 const producttour = require('./routes/producttours');
+const employee = require('./routes/employees');
+const traininghead = require('./routes/trainingheads');
+const trainingsubhead = require('./routes/trainingsubheads');
+const budget = require('./routes/budgets');
+const budgetplan = require('./routes/budgetplans');
+const primaryemail = require('./routes/primaryemails');
 
 // include fronend router files
 const testimonial = require('./routes/frontend/testimonials');
@@ -123,6 +129,12 @@ app.use('/api/whitepapers', whitepaper);
 app.use('/api/pressreleases', pressrelease);
 app.use('/api/careers', career);
 app.use('/api/contacts', contact);
+app.use('/api/employees', employee);
+app.use('/api/trainingheads', traininghead);
+app.use('/api/trainingsubheads', trainingsubhead);
+app.use('/api/budgets', budget);
+app.use('/api/budgetplans', budgetplan);
+app.use('/api/primaryemails', primaryemail);
 app.use('/api/commons', common);
 /*
 app.get('/', cors(corsOptions), (req, res) => {

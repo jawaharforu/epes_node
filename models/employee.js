@@ -30,6 +30,15 @@ const EmployeeSchema = mongoose.Schema({
         ref: 'Organogram',
         required: [true,'No Organogram id found']
     },
+    departmentid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Department',
+        required: [true,'No Company id found']
+    },
+    subdepartmentid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subdepartment'
+    },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
@@ -57,4 +66,8 @@ module.exports.deleteEmployee = function(employeeid, callback){
 
 module.exports.updateEmployee = function(employeeid, updateResult, callback){
     Employee.update({_id: employeeid},updateResult, callback);
+};
+
+module.exports.getEmployeeById = function(employeeid, callback){
+    Employee.findById(employeeid, callback);
 };

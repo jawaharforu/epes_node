@@ -29,6 +29,9 @@ const CompanySchema = mongoose.Schema({
     city: {
         type: String
     },
+    logo: {
+        type: String
+    },
     status: {
         type: Boolean
     },

@@ -18,6 +18,7 @@ router.post('/', (req, res, next) => {
       country: req.body.country,
       state: req.body.state,
       city: req.body.city,
+      logo: req.body.logo,
       status: req.body.status
   };
 

@@ -9,7 +9,7 @@ const SubdepartmentSchema = mongoose.Schema({
     departmentid: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Department',
-      required: [true,'No Depatment id found']
+      required: [true,'No Department id found']
     },
     companyid: {
       type: mongoose.Schema.Types.ObjectId,
