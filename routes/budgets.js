@@ -9,7 +9,8 @@ const Budget = require('../models/budget');
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldBudget = {
     year: req.body.year,
-    amount: req.body.amount
+    amount: req.body.amount,
+    companyid: req.user.companyid
   };
 
   if(req.body.budgetid) {
@@ -21,11 +22,11 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
       }
     });
   } else {
-    Budget.addBudget(new Budget(fieldBudget), (err, Budget) => {
+    Budget.addBudget(new Budget(fieldBudget), (err, budget) => {
       if(err){
         res.json({success: false, msg: 'Failed to add Budget'});
       }else{
-        res.json({success: true, msg: 'Budget Add', data: Budget});
+        res.json({success: true, msg: 'Budget Add', data: budget});
       }
     });
   }
