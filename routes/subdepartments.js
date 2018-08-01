@@ -10,8 +10,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
   let fieldSubdepartment = {
       name: req.body.name,
       departmentid: req.body.departmentid,
-      companyid: req.user.companyid,
-      role: req.user.role
+      companyid: req.user.companyid
   };
 
   if(req.body.subdepartmentid) {

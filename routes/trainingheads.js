@@ -8,7 +8,8 @@ const Traininghead = require('../models/traininghead');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldTraininghead = {
-    name: req.body.name
+    name: req.body.name,
+    companyid: req.user.companyid
   };
 
   if(req.body.trainingheadid) {
