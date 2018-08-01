@@ -4,7 +4,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
-const Appraisal = require('../models/Appraisal');
+const Appraisal = require('../models/appraisal');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldAppraisal = {
