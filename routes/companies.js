@@ -16,6 +16,7 @@ router.post('/', (req, res, next) => {
       companycontact: req.body.companycontact,
       companyaddress: req.body.companyaddress,
       country: req.body.country,
+      countrycode: req.body.countrycode,
       state: req.body.state,
       city: req.body.city,
       logo: req.body.logo,

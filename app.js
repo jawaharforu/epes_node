@@ -96,6 +96,7 @@ app.use(function (req, res, next) {
 });
 */
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname + '/public/images'));
 app.use(bodyParser.urlencoded({limit: '50mb'}));
 app.use(bodyParser.json({limit: '50mb'}));
 

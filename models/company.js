@@ -20,6 +20,9 @@ const CompanySchema = mongoose.Schema({
     companyaddress: {
         type: String
     },
+    countrycode: {
+      type: String
+    },
     country: {
         type: String
     },

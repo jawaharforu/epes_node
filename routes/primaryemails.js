@@ -8,7 +8,8 @@ const Primaryemail = require('../models/primaryemail');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldPrimaryemail = {
-    email: req.body.email
+    email: req.body.email,
+    companyid: req.user.companyid
   };
 
   if(req.body.primaryemailid) {
