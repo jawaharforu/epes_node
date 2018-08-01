@@ -88,4 +88,14 @@ router.get('/:companyid', passport.authenticate('jwt', { session: false }), (req
   });
 });
 
+router.get('/get/companyinfo', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Company.getCompanyById(req.user.companyid, (err, company) => {
+    if (company) {
+      res.json({success: true, data: company});
+    } else {
+      res.json({success: false, msg: 'Company not found'});
+    }
+  });
+});
+
 module.exports = router;
