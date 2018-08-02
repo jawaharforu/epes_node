@@ -42,7 +42,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 });
 
 router.get('/:budgetid', (req, res, next) => {
-  Faq.getBudgetById(req.params.budgetid, (err, budget) => {
+  Budget.getBudgetById(req.params.budgetid, (err, budget) => {
     if (budget) {
       res.json({success: true, data: budget});
     } else {

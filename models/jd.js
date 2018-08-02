@@ -41,6 +41,6 @@ module.exports.updateJd = function(jdid, updateResult, callback){
     Jd.update({_id: jdid},updateResult, callback);
 };
 
-module.exports.gerJdById = function(jdid, callback){
+module.exports.getJdById = function(jdid, callback){
     Jd.findById(jdid, callback);
 };

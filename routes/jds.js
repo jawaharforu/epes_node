@@ -108,8 +108,18 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
   .catch(err => console.log(err));
 });
 
+router.get('/:jdid', (req, res, next) => {
+  Jd.getBudgetById(req.params.jdid, (err, jd) => {
+    if (jd) {
+      res.json({success: true, data: jd});
+    } else {
+      res.json({success: false, msg: 'Faq not found'});
+    }
+  });
+});
+
 router.delete('/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Jd.gerJdById(req.params.jdid, (err, jd) => {
+  Jd.getJdById(req.params.jdid, (err, jd) => {
     if (jd) {
       if(jd.companyid.toString() === req.user.companyid.toString()) {
         Jd.deleteJd(req.params.jdid, (err, result) => {
