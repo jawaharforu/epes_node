@@ -16,10 +16,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
       address: req.body.address,
       status: req.body.status,
       organogramid: req.body.organogramid,
-      departmentid: req.body.departmentid,
-      subdepartmentid: req.body.subdepartmentid,
-      companyid: req.user.companyid,
-      role: req.user.role
+      companyid: req.user.companyid
   };
 
   if(req.body.employeeid) {

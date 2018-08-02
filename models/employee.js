@@ -4,10 +4,19 @@ const Company = require('./company');
 const Organogram = require('./organogram');
 
 const EmployeeSchema = mongoose.Schema({
+    type: {
+        type: String
+    },
     employeenum: {
         type: String
     },
     employeename: {
+        type: String
+    },
+    employeetype: {
+        type: String
+    },
+    experience: {
         type: String
     },
     designation: {
@@ -29,15 +38,6 @@ const EmployeeSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Organogram',
         required: [true,'No Organogram id found']
-    },
-    departmentid: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Department',
-        required: [true,'No Company id found']
-    },
-    subdepartmentid: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Subdepartment'
     },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,

@@ -128,4 +128,13 @@ function func(t, c, ids) {
   return a;
 }
 
+router.get('/get/full/list', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Organogram.find({companyid: req.user.companyid})
+  .populate('departmentid')
+  .populate('subdepartmentid')
+  .then(organogram => {
+    res.json({success: true, data: organogram});
+  })
+  .catch(err => console.log(err));
+});
 module.exports = router;

@@ -43,7 +43,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 });
 
 router.delete('/:trainingsubheadid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Trainingsubhead.getTrainingsubheadById(req.params.trainingsubheadid, (err, Trainingsubhead) => {
+  Trainingsubhead.getTrainingsubheadById(req.params.trainingsubheadid, (err, trainingsubhead) => {
     if (trainingsubhead) {
       if(trainingsubhead.companyid.toString() === req.user.companyid.toString()) {
         Trainingsubhead.deleteTrainingsubhead(req.params.trainingsubheadid, (err, result) => {
