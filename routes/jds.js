@@ -109,11 +109,11 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 });
 
 router.get('/:jdid', (req, res, next) => {
-  Jd.getBudgetById(req.params.jdid, (err, jd) => {
+  Jd.getJdById(req.params.jdid, (err, jd) => {
     if (jd) {
       res.json({success: true, data: jd});
     } else {
-      res.json({success: false, msg: 'Faq not found'});
+      res.json({success: false, msg: 'JD not found'});
     }
   });
 });

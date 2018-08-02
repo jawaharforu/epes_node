@@ -79,5 +79,12 @@ router.get('/:employeeid', passport.authenticate('jwt', { session: false }), (re
   });
 });
 
+router.get('/getbylevel/:organogramid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Employee.find({organogramid: req.params.organogramid})
+  .then(employee => {
+    res.json({success: true, data: employee});
+  })
+  .catch(err => console.log(err));
+});
 
 module.exports = router;
