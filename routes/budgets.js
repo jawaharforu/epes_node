@@ -41,6 +41,15 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
   .catch(err => console.log(err));
 });
 
+router.get('/:budgetid', (req, res, next) => {
+  Faq.getBudgetById(req.params.budgetid, (err, budget) => {
+    if (budget) {
+      res.json({success: true, data: budget});
+    } else {
+      res.json({success: false, msg: 'Faq not found'});
+    }
+  });
+});
 
 router.delete('/:budgetid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Budget.getBudgetById(req.params.budgetid, (err, budget) => {

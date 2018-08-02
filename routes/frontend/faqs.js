@@ -66,7 +66,7 @@ router.delete('/:faqid', passport.authenticate('jwt', { session: false }), (req,
 });
 
 router.get('/:faqid', (req, res, next) => {
-  Faq.gerFaqById(req.params.faqid, (err, Faq) => {
+  Faq.getFaqById(req.params.faqid, (err, Faq) => {
     if (Faq) {
       res.json({success: true, data: Faq});
     } else {

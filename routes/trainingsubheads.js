@@ -34,7 +34,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 });
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Trainingsubhead.find()
+  Trainingsubhead.find({companyid: req.user.companyid})
   .populate('trainingheadid')
   .then(trainingsubhead => {
     res.json({success: true, data: trainingsubhead});

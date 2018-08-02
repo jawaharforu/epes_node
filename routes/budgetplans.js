@@ -38,7 +38,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 });
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Budgetplan.find()
+  Budgetplan.find({companyid: req.user.companyid})
   .populate('trainingheadid')
   .then(Budgetplan => {
     res.json({success: true, data: Budgetplan});

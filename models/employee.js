@@ -25,6 +25,9 @@ const EmployeeSchema = mongoose.Schema({
     email: {
         type: String
     },
+    countrycode: {
+        type: String
+    },
     mobile: {
         type: String
     },
@@ -36,8 +39,7 @@ const EmployeeSchema = mongoose.Schema({
     },
     organogramid: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Organogram',
-        required: [true,'No Organogram id found']
+        ref: 'Organogram'
     },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,

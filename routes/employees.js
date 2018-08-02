@@ -10,8 +10,10 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
   let fieldEmployee = {
       employeenum: req.body.employeenum,
       employeename: req.body.employeename,
+      employeetype: req.body.employeetype,
       designation: req.body.designation,
       email: req.body.email,
+      countrycode: req.body.countrycode,
       mobile: req.body.mobile,
       address: req.body.address,
       status: req.body.status,
@@ -40,9 +42,9 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 });
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Employee.find()
-  .then(Employee => {
-    res.json({success: true, data: Employee});
+  Employee.find({companyid: req.user.companyid})
+  .then(employee => {
+    res.json({success: true, data: employee});
   })
   .catch(err => console.log(err));
 });
@@ -76,5 +78,6 @@ router.get('/:employeeid', passport.authenticate('jwt', { session: false }), (re
     }
   });
 });
+
 
 module.exports = router;
