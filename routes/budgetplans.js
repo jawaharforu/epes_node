@@ -40,6 +40,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Budgetplan.find({companyid: req.user.companyid})
   .populate('trainingheadid')
+  .populate('trainingsubheadid')
   .populate('assessmenttypeid')
   .populate('headerid')
   .populate('budgetid')
@@ -72,6 +73,7 @@ router.delete('/:budgetplanid', passport.authenticate('jwt', { session: false })
 router.get('/list/:budgetid', (req, res, next) => {
   Budgetplan.find({budgetid: req.params.budgetid})
   .populate('trainingheadid')
+  .populate('trainingsubheadid')
   .populate('assessmenttypeid')
   .populate('headerid')
   .populate('budgetid')
