@@ -19,9 +19,9 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
     executivesbonus: req.body.executivesbonus,
     companyid: req.user.companyid
   };
-  Appraisal.find({companyid: req.user.companyid})
-  .then(appraisal => {
-    if(appraisal) {
+  Appraisal.findOne({companyid: req.user.companyid})
+  .then(appraisals => {
+    if(appraisals) {
       Appraisal.updateAppraisal(req.body.appraisalid, fieldAppraisal, (err, appraisal) => {
         if(err) {
           res.json({success: false, msg: 'Failed to update Appraisal'});
