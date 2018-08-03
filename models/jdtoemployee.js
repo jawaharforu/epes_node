@@ -40,6 +40,10 @@ module.exports.deleteJdtoemployee = function(jdtoemployeeid, callback){
     Jdtoemployee.remove({_id: jdtoemployeeid}, callback);
 };
 
-module.exports.updateEmployee = function(jdtoemployeeid, updateResult, callback){
+module.exports.updateJdtoemployee = function(jdtoemployeeid, updateResult, callback){
     Jdtoemployee.update({_id: jdtoemployeeid},updateResult, callback);
+};
+
+module.exports.getJdtoemployeeById = function(jdtoemployeeid, callback){
+  Jdtoemployee.findById(jdtoemployeeid, callback);
 };

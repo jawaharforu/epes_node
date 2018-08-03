@@ -8,8 +8,11 @@ const Assessment = require('../models/assessment');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldAssessment = {
-    year: req.body.year,
-    amount: req.body.amount,
+    title: req.body.title,
+    periodoftime: req.body.periodoftime,
+    duration: req.body.duration,
+    duedate: req.body.duedate,
+    description: req.body.description,
     companyid: req.user.companyid
   };
 
