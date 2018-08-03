@@ -43,6 +43,10 @@ module.exports.deleteAssessment = function(assessmentid, callback){
     Assessment.remove({_id: assessmentid}, callback);
 };
 
-module.exports.updateEmployee = function(assessmentid, updateResult, callback){
+module.exports.updateAssessment = function(assessmentid, updateResult, callback){
     Assessment.update({_id: assessmentid},updateResult, callback);
+};
+ 
+module.exports.getAssessmentById = function(assessmentid, callback){
+  Assessment.findById(assessmentid, callback);
 };

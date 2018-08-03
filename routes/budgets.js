@@ -46,7 +46,7 @@ router.get('/:budgetid', (req, res, next) => {
     if (budget) {
       res.json({success: true, data: budget});
     } else {
-      res.json({success: false, msg: 'Faq not found'});
+      res.json({success: false, msg: 'Assessment not found'});
     }
   });
 });
