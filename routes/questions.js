@@ -17,7 +17,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
     role: req.user.role
   };
   if(req.body.questionid) {
-    Question.updateScale(req.body.questionid, fieldQuestion, (err, scale) => {
+    Question.updateQuestion(req.body.questionid, fieldQuestion, (err, scale) => {
       if(err) {
         res.json({success: false, msg: 'Failed to update Question'});
       } else {
