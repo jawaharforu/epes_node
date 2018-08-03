@@ -12,24 +12,28 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
     employeeid: req.body.employeeid,
     companyid: req.user.companyid
   };
+  Jdtoemployee.findOne({jdid: req.body.jdid})
+  .then(jdtoemployee => {
+    if(jdtoemployee) {
+      Jdtoemployee.updateJdtoemployee(req.body.jdid, fieldJdtoemployee, (err, jdtoemployee) => {
+        if(err) {
+          res.json({success: false, msg: 'Failed to update Jdtoemployee'});
+        } else {
+          res.json({success: true, msg: 'Jdtoemployee Updated'});
+        }
+      });
+    } else {
+      Jdtoemployee.addJdtoemployee(new Jdtoemployee(fieldJdtoemployee), (err, jdtoemployee) => {
+        if(err){
+          res.json({success: false, msg: 'Failed to add Jdtoemployee'});
+        }else{
+          res.json({success: true, msg: 'Jdtoemployee Add', data: jdtoemployee});
+        }
+      });
+    }
+  })
+  .catch(err => conaole.log(err));
 
-  if(req.body.jdtoemployeeid) {
-    Jdtoemployee.updateJdtoemployee(req.body.jdtoemployeeid, fieldJdtoemployee, (err, jdtoemployee) => {
-      if(err) {
-        res.json({success: false, msg: 'Failed to update Jdtoemployee'});
-      } else {
-        res.json({success: true, msg: 'Jdtoemployee Updated'});
-      }
-    });
-  } else {
-    Jdtoemployee.addJdtoemployee(new Jdtoemployee(fieldJdtoemployee), (err, jdtoemployee) => {
-      if(err){
-        res.json({success: false, msg: 'Failed to add Jdtoemployee'});
-      }else{
-        res.json({success: true, msg: 'Jdtoemployee Add', data: jdtoemployee});
-      }
-    });
-  }
 
 });
 
@@ -41,14 +45,12 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
   .catch(err => console.log(err));
 });
 
-router.get('/:jdtoemployeeid', (req, res, next) => {
-  Jdtoemployee.getJdtoemployeeById(req.params.Jdtoemployeeid, (err, jdtoemployee) => {
-    if (jdtoemployee) {
-      res.json({success: true, data: jdtoemployee});
-    } else {
-      res.json({success: false, msg: 'Assessment not found'});
-    }
-  });
+router.get('/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Jdtoemployee.find({ $or: [{'companyid': req.user.companyid},{'jdid' : req.params.jdid}] })
+  .then(jdtoemployee => {
+    res.json({success: true, data: jdtoemployee});
+  })
+  .catch(err => console.log(err));
 });
 
 router.delete('/:jdtoemployeeid', passport.authenticate('jwt', { session: false }), (req, res, next) => {

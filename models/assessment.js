@@ -36,7 +36,7 @@ const AssessmentSchema = mongoose.Schema({
 const Assessment = module.exports = mongoose.model('Assessment', AssessmentSchema);
 
 module.exports.addAssessment = function(newAssessment, callback){
-    newEmployee.save(callback);
+    newAssessment.save(callback);
 };
 
 module.exports.deleteAssessment = function(assessmentid, callback){
@@ -46,7 +46,7 @@ module.exports.deleteAssessment = function(assessmentid, callback){
 module.exports.updateAssessment = function(assessmentid, updateResult, callback){
     Assessment.update({_id: assessmentid},updateResult, callback);
 };
- 
+
 module.exports.getAssessmentById = function(assessmentid, callback){
   Assessment.findById(assessmentid, callback);
 };

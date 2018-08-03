@@ -10,11 +10,11 @@ const JdtoemployeeSchema = mongoose.Schema({
         ref: 'Jd',
         required: [true,'No Organogram id found']
     },
-    employeeid: {
+    employeeid: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Employee',
         required: [true,'No Organogram id found']
-    },
+    }],
     companyid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
@@ -33,15 +33,15 @@ const JdtoemployeeSchema = mongoose.Schema({
 const Jdtoemployee = module.exports = mongoose.model('Jdtoemployee', JdtoemployeeSchema);
 
 module.exports.addJdtoemployee = function(newJdtoemployee, callback){
-    newEmployee.save(callback);
+    newJdtoemployee.save(callback);
 };
 
-module.exports.deleteJdtoemployee = function(jdtoemployeeid, callback){
-    Jdtoemployee.remove({_id: jdtoemployeeid}, callback);
+module.exports.deleteJdtoemployee = function(jdid, callback){
+    Jdtoemployee.remove({jdid: jdid}, callback);
 };
 
-module.exports.updateJdtoemployee = function(jdtoemployeeid, updateResult, callback){
-    Jdtoemployee.update({_id: jdtoemployeeid},updateResult, callback);
+module.exports.updateJdtoemployee = function(jdid, updateResult, callback){
+    Jdtoemployee.update({jdid: jdid},updateResult, callback);
 };
 
 module.exports.getJdtoemployeeById = function(jdtoemployeeid, callback){
