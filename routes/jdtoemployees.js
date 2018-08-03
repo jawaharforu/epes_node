@@ -48,7 +48,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 });
 
 router.get('/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Jdtoemployee.find({ $or: [{'companyid': req.user.companyid},{'jdid' : req.params.jdid}] })
+  Jdtoemployee.find({ $and: [{'companyid': req.user.companyid},{'jdid' : req.params.jdid}] })
   .populate('jdid')
   .populate('employeeid')
   .then(jdtoemployee => {

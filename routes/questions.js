@@ -12,6 +12,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
     scaleid: req.body.scaleid,
     assessmenttypeid: req.body.assessmenttypeid,
     headerid: req.body.headerid,
+    type: req.body.type,
     companyid: req.user.companyid,
     role: req.user.role
   };
@@ -58,7 +59,7 @@ router.get('/getlist', passport.authenticate('jwt', { session: false }), (req, r
 });
 
 router.delete('/:questionid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Question.getScaleById(req.params.questionid, (err, question) => {
+  Question.getQuestionById(req.params.questionid, (err, question) => {
     if (question) {
       if(question.companyid.toString() === req.user.companyid.toString()) {
         Question.deleteQuestion(req.params.questionid, (err, result) => {

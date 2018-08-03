@@ -23,6 +23,9 @@ const QuestionSchema = mongoose.Schema({
         ref: 'Header',
         required: [true,'No header id found']
     },
+    type: {
+        type: String
+    },
     role: {
         type: String
     },
