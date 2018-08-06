@@ -6,6 +6,8 @@ const config = require('../config/database');
 
 const Organogram = require('../models/organogram');
 // var autoIncrement = require("mongodb-autoincrement");
+const Employee = require('../models/employee');
+var _ = require('lodash');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldOrganogram = {
@@ -101,27 +103,34 @@ router.get('/getchild/:uniqueid', passport.authenticate('jwt', { session: false 
 router.get('/getfull/list', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Organogram.find({companyid: req.user.companyid})
   .then(organogram => {
-    var t = [];
-    var ids = [];
-    for (var i = 0; i < organogram.length; i++) {
-        t[organogram[i].uniqueid] = organogram[i].parentid;
-        ids[organogram[i].uniqueid] = organogram[i];
-        if (i === (organogram.length - 1)) {
-          res.json({success: true, data: func(t, 0, ids)});
-        }
-    }
+    Employee.find({companyid: req.user.companyid})
+    .then(employee => {
+      var t = [];
+      var ids = [];
+      for (var i = 0; i < organogram.length; i++) {
+          t[organogram[i].uniqueid] = organogram[i].parentid;
+          ids[organogram[i].uniqueid] = organogram[i];
+          if (i === (organogram.length - 1)) {
+            res.json({success: true, data: func(t, 0, ids, employee)});
+          }
+      }
+    })
+    .catch(err => console.log(err));
   })
   .catch(err => console.log(err));
 });
 
-function func(t, c, ids) {
+function func(t, c, ids, employee) {
   // https://stackoverflow.com/questions/36810428/building-multi-level-menu-using-nodejs
   var a = [];
   for (var i = 0; i < t.length; i++) {
       if (t[i] === c) {
           a.push({
               name: ids[i].name,
-              subordinates: func(t, i, ids)
+              numemp: _.filter(employee, { organogramid: ids[i]._id }).map(item => {
+                return item;
+              }),
+              subordinates: func(t, i, ids, employee),
           });
       }
   }

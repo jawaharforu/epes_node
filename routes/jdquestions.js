@@ -12,7 +12,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
     questionid: req.body.questionid,
     companyid: req.user.companyid
   };
-  Jdquestion.findOne({jdid: req.body.jdid},{questionid: req.body.questionid})
+  Jdquestion.findOne({ $and: [{'jdid': req.body.jdid},{'questionid' : req.body.questionid}] })
   .then(jdquestion => {
     if(jdquestion) {
       Jdquestion.updateJdquestion(jdquestion._id, fieldJdquestion, (err, jdquestion) => {
@@ -64,7 +64,7 @@ router.delete('/:jdquestionid', passport.authenticate('jwt', { session: false })
 });
 
 router.get('/check/:jdid/:questionid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Jdquestion.findOne({jdid: req.params.jdid},{questionid: req.params.questionid})
+  Jdquestion.findOne({ $and: [{'jdid': req.body.jdid},{'questionid' : req.body.questionid}] })
   .then(jdquestion => {
     if (jdquestion) {
       res.json({success: true, data: jdquestion});
