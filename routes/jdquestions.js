@@ -44,23 +44,16 @@ router.get('/list', passport.authenticate('jwt', { session: false }), (req, res,
 });
 
 router.delete('/:jdquestionid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  Jdquestion.getJdquestionById(req.params.jdquestion, (err, jdquestion) => {
+  var split = req.params.jdquestionid.split("::");
+  Jdquestion.remove({ $and: [{'jdid': split[0]},{'questionid' : split[1]}] })
+  .then(jdquestion => {
     if (jdquestion) {
-      if(jdquestion.companyid.toString() === req.user.companyid.toString()) {
-        Jdquestion.deleteJdquestion(req.params.jdquestion, (err, result) => {
-          if(err){
-            res.json({success: false, msg: 'Failed to delete Scale'});
-          }else{
-            res.json({success: true, msg: 'Scale deleted successfully'});
-          }
-        });
-      } else {
-        res.json({success: false, msg: 'Your not allowed to delete'});
-      }
+      res.json({success: true, msg: 'Question removed successfully'});
     } else {
-      res.json({success: false, msg: 'Scale not found'});
+      res.json({success: false, msg: 'Failed to removed Organogram'});
     }
-  });
+  })
+  .catch(err => console.log(err));
 });
 
 router.get('/check/:jdid/:questionid', passport.authenticate('jwt', { session: false }), (req, res, next) => {

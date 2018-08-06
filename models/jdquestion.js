@@ -37,7 +37,7 @@ module.exports.addJdquestion = function(newJdquestion, callback){
 };
 
 module.exports.deleteJdquestion = function(jdquestionid, callback){
-    Jdquestion.remove({_id: jdquestionid}, callback);
+    Jdquestion.remove({questionid: jdquestionid}, callback);
 };
 
 module.exports.updateJdquestion = function(jdid, updateResult, callback){
