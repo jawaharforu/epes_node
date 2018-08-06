@@ -44,6 +44,7 @@ const primaryemail = require('./routes/primaryemails');
 const appraisal = require('./routes/appraisals');
 const assessment = require('./routes/assessments');
 const jdtoemployee = require('./routes/jdtoemployees');
+const globalsetting = require('./routes/globalsettings');
 
 // include fronend router files
 const testimonial = require('./routes/frontend/testimonials');
@@ -143,6 +144,7 @@ app.use('/api/appraisals', appraisal);
 app.use('/api/commons', common);
 app.use('/api/assessments', assessment);
 app.use('/api/jdtoemployees', jdtoemployee);
+app.use('/api/globalsettings', globalsetting);
 /*
 app.get('/', cors(corsOptions), (req, res) => {
     res.send('Invalied Endpoing');

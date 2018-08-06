@@ -127,9 +127,7 @@ function func(t, c, ids, employee) {
       if (t[i] === c) {
           a.push({
               name: ids[i].name,
-              numemp: _.filter(employee, { organogramid: ids[i]._id }).map(item => {
-                return item;
-              }),
+              numemp: _.filter(employee, { organogramid: ids[i]._id }).length,
               subordinates: func(t, i, ids, employee),
           });
       }
