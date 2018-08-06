@@ -22,7 +22,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
   Appraisal.findOne({companyid: req.user.companyid})
   .then(appraisals => {
     if(appraisals) {
-      Appraisal.updateAppraisal(req.body.appraisalid, fieldAppraisal, (err, appraisal) => {
+      Appraisal.updateAppraisal(appraisals._id, fieldAppraisal, (err, appraisal) => {
         if(err) {
           res.json({success: false, msg: 'Failed to update Appraisal'});
         } else {
