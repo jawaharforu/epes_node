@@ -59,6 +59,7 @@ const whitepaper = require('./routes/frontend/whitepapers');
 const pressrelease = require('./routes/frontend/pressreleases');
 const career = require('./routes/frontend/careers');
 const contact = require('./routes/frontend/contacts');
+const hrindex = require('./routes/frontend/hrindexs');
 
 const common = require('./routes/frontend/commons');
 
@@ -121,6 +122,7 @@ app.use('/api/organograms', organogram);
 app.use('/api/departments', department);
 app.use('/api/subdepartments', subdepartment);
 app.use('/api/producttours', producttour);
+app.use('/api/hrindexs', hrindex);
 // frontend path
 app.use('/api/testimonials', testimonial);
 app.use('/api/products', product);
