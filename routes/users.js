@@ -7,6 +7,8 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const xoauth2 = require('xoauth2');
 const User = require('../models/user');
+const SendEmail = require('../thirdparty/email');
+const Otp = require('../models/otp');
 
 // Registration
 router.post('/', (req, res, next) => {
@@ -112,6 +114,50 @@ router.post('/checkuser/email', (req, res, next) => {
     }
   }).catch(err => res.json(err));
 });
+
+router.post('/check/otp', (req, res, next) => {
+  Otp.findById(req.body.otpid).then(otp => {
+    if(otp){
+      if(otp.otp === req.body.otp) {
+        res.json({success:true, msg: "OTP matched"});
+      } else {
+        res.json({success:false, msg: "User not found"});
+      }
+    }else{
+      res.json({success:false, msg: "OTP Not matching"});
+    }
+  }).catch(err => res.json(err));
+});
+
+router.post('/send/email/otp', async (req, res, next) => {
+  const randomnumber = Math.floor(Math.random() * 99999) + 9999;
+  var subject = '360EPES - OTP';
+  var body = `
+        <h2>360EPES - OTP</h2>
+        <h3>${randomnumber}</h3>
+        <p>otp will expire in 5 min</p>
+    `;
+  var send = await SendEmail.sendEmail(req.body.email, subject, body);
+  if (send) {
+    let field = {
+      email: req.body.email,
+      otp: randomnumber,
+      userd: false,
+    };
+    Otp.addOtp(new Otp(field), (err, otp) => {
+      if(err){
+        res.json({success: false, msg: 'Failed to load otp'});
+      }else{
+        res.json({success: true, msg: 'Otp sent', data: otp});
+      }
+    });
+  } else {
+    res.json({success: false, msg: 'Failed to send otp'});
+  }
+});
+
+
+
 
 // get current user using token
 router.get(

@@ -108,7 +108,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
   .catch(err => console.log(err));
 });
 
-router.get('/:jdid', (req, res, next) => {
+router.get('/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Jd.getJdById(req.params.jdid, (err, jd) => {
     if (jd) {
       res.json({success: true, data: jd});
