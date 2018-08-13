@@ -3,6 +3,11 @@ const config = require('../config/database');
 const Company = require('./company');
 
 const HeaderSchema = mongoose.Schema({
+    assessmenttypeid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Assessmenttype',
+        required: [true,'No Company id found']
+    },
     headername: {
         type: String
     },

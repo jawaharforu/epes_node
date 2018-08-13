@@ -4,7 +4,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
-const Globalsetting = require('../models/Globalsetting');
+const Globalsetting = require('../models/globalsetting');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldGlobalsetting = {

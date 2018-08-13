@@ -8,6 +8,7 @@ const Header = require('../models/header');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldHeader = {
+    assessmenttypeid: req.body.assessmenttypeid,
     headername: req.body.headername,
     description: req.body.description,
     companyid: req.user.companyid,
@@ -36,6 +37,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Header.find({companyid: req.user.companyid})
+  .populate('assessmenttypeid')
   .then(header => {
     res.json({success: true, data: header});
   })
@@ -44,6 +46,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res, nex
 
 router.get('/getlist', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Header.find({ $or: [{'companyid': req.user.companyid},{'role' : 'superadmin'}] })
+  .populate('assessmenttypeid')
   .then(header => {
     res.json({success: true, data: header});
   })
@@ -68,5 +71,14 @@ router.delete('/:headerid', passport.authenticate('jwt', { session: false }), (r
       res.json({success: false, msg: 'Header not found'});
     }
   });
+});
+
+router.get('/list/:assessmenttypeid', (req, res, next) => {
+  Header.find({assessmenttypeid: req.params.assessmenttypeid})
+  .populate('assessmenttypeid')
+  .then(header => {
+    res.json({success: true, data: header});
+  })
+  .catch(err => console.log(err));
 });
 module.exports = router;

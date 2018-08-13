@@ -76,4 +76,12 @@ router.get('/getbyjd/:jdid', passport.authenticate('jwt', { session: false }), (
   .catch(err => console.log(err));
 });
 
+router.get('/getbyjdwithqu/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Jdquestion.find({jdid: req.params.jdid})
+  .populate({path: 'questionid', populate: [{path: 'scaleid'},{path: 'assessmenttypeid'},{path: 'headerid'}]})
+  .then(jdquestion => {
+    res.json({success: true, data: jdquestion});
+  })
+  .catch(err => console.log(err));
+});
 module.exports = router;
