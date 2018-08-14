@@ -47,3 +47,38 @@ module.exports.updateJdquestion = function(jdid, updateResult, callback){
 module.exports.getJdquestionById = function(jdquestionid, callback){
   Jdquestion.findById(jdquestionid, callback);
 };
+
+module.exports.getAssAndHeadByJD = function(jdid, callback) {
+    Jdquestion.aggregate([
+        {
+            $match: {
+              'jdid': mongoose.Types.ObjectId(jdid)
+            }
+        },
+        {
+            $lookup: {
+                from: 'questions',
+                localField: 'questionid',
+                foreignField: '_id',
+                as: 'question'
+            }
+        },
+        { $group : { _id : "$question.assessmenttypeid", heads: { $push: { item: "$question.headerid" } } } },
+        {
+          $lookup: {
+              from: 'assessmenttypes',
+              localField: '_id',
+              foreignField: '_id',
+              as: 'assessmenttype'
+          }
+      },
+      {
+        $lookup: {
+            from: 'headers',
+            localField: 'heads.item',
+            foreignField: '_id',
+            as: 'header'
+        }
+    },
+    ], callback);
+};

@@ -6,6 +6,7 @@ const config = require('../config/database');
 
 const Jdquestion = require('../models/jdquestion');
 const Question = require('../models/question');
+const mongoose = require('mongoose');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldJdquestion = {
@@ -87,22 +88,32 @@ router.get('/getbyjdwithqu/:jdid', passport.authenticate('jwt', { session: false
 });
 
 router.get('/fetchassessandheadbyjd/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+
   Jdquestion.find({jdid: req.params.jdid})
   .then(jdquestion => {
     Question.find({
       "_id" : {
-        "$in" :
-          [jdquestion.map(item => {
-            return item.questionid
-          })]
+        "$in" : jdquestion.map(item => {
+          return mongoose.Types.ObjectId(item.questionid);
+        })
        }
     })
+    .populate('assessmenttypeid')
+    .populate('headerid')
     .then(question => {
       res.json({success: true, data: question});
     })
     .catch(err => console.log(err));
   })
   .catch(err => console.log(err));
+
+});
+
+router.get('/assessandhead/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Jdquestion.getAssAndHeadByJD(req.params.jdid, (err, jdquestion) => {
+      if(err) throw err;
+      res.json({success: true, data: jdquestion});
+  });
 });
 
 module.exports = router;

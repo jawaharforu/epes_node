@@ -13,23 +13,27 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
     companyid: req.user.companyid
   };
 
-  if(req.body.weightageid) {
-    Weightage.updateWeightage(req.body.weightageid, fieldWeightage, (err, weightage) => {
-      if(err) {
-        res.json({success: false, msg: 'Failed to update Weightage'});
-      } else {
-        res.json({success: true, msg: 'Weightage Updated'});
-      }
-    });
-  } else {
-    Weightage.addWeightage(new Weightage(fieldWeightage), (err, weightage) => {
-      if(err){
-        res.json({success: false, msg: 'Failed to add Weightage'});
-      }else{
-        res.json({success: true, msg: 'Weightage Add', data: weightage});
-      }
-    });
-  }
+  Weightage.findOne({'jdid': req.body.jdid})
+  .then(weightages => {
+    if(weightages) {
+      Weightage.updateWeightage(req.body.weightageid, fieldWeightage, (err, weightage) => {
+        if(err) {
+          res.json({success: false, msg: 'Failed to update Weightage'});
+        } else {
+          res.json({success: true, msg: 'Weightage Updated'});
+        }
+      });
+    } else {
+      Weightage.addWeightage(new Weightage(fieldWeightage), (err, weightage) => {
+        if(err){
+          res.json({success: false, msg: 'Failed to add Weightage'});
+        }else{
+          res.json({success: true, msg: 'Weightage Add', data: weightage});
+        }
+      });
+    }
+  })
+  .catch(err => console.log(err));
 
 });
 
