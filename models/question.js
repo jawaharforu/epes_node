@@ -16,7 +16,7 @@ const QuestionSchema = mongoose.Schema({
     assessmenttypeid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Assessmenttype',
-        required: [true,'No scale id found']
+        required: [true,'No Assessmenttype id found']
     },
     headerid: {
         type: mongoose.Schema.Types.ObjectId,

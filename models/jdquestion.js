@@ -8,12 +8,12 @@ const JdquestionSchema = mongoose.Schema({
     jdid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Jd',
-        required: [true,'No Company id found']
+        required: [true,'No JD id found']
     },
     questionid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Question',
-        required: [true,'No Company id found']
+        required: [true,'No Question id found']
     },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,

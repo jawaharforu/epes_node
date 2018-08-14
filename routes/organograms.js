@@ -55,6 +55,8 @@ router.get('/:organogramid', passport.authenticate('jwt', { session: false }), (
     var parent = req.params.organogramid.toString();
   }
   Organogram.find({$and:[{"companyid":req.user.companyid},{"parentid":parent}]})
+  .populate('departmentid')
+  .populate('subdepartmentid')
   .then(organogram => {
     res.json({success: true, data: organogram});
   })
@@ -94,6 +96,8 @@ router.delete('/:organogramid', passport.authenticate('jwt', { session: false })
 
 router.get('/getchild/:uniqueid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Organogram.find({parentid: req.params.uniqueid})
+  .populate('departmentid')
+  .populate('subdepartmentid')
   .then(organogram => {
     res.json({success: true, data: organogram});
   })

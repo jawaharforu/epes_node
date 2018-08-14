@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
 const Jdquestion = require('../models/jdquestion');
+const Question = require('../models/question');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldJdquestion = {
@@ -84,4 +85,24 @@ router.get('/getbyjdwithqu/:jdid', passport.authenticate('jwt', { session: false
   })
   .catch(err => console.log(err));
 });
+
+router.get('/fetchassessandheadbyjd/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Jdquestion.find({jdid: req.params.jdid})
+  .then(jdquestion => {
+    Question.find({
+      "_id" : {
+        "$in" :
+          [jdquestion.map(item => {
+            return item.questionid
+          })]
+       }
+    })
+    .then(question => {
+      res.json({success: true, data: question});
+    })
+    .catch(err => console.log(err));
+  })
+  .catch(err => console.log(err));
+});
+
 module.exports = router;
