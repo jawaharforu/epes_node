@@ -63,22 +63,32 @@ module.exports.getAssAndHeadByJD = function(jdid, callback) {
                 as: 'question'
             }
         },
-        { $group : { _id : "$question.assessmenttypeid", heads: { $push: { item: "$question.headerid" } } } },
         {
-          $lookup: {
-              from: 'assessmenttypes',
-              localField: '_id',
-              foreignField: '_id',
-              as: 'assessmenttype'
-          }
-      },
-      {
-        $lookup: {
-            from: 'headers',
-            localField: 'heads.item',
-            foreignField: '_id',
-            as: 'header'
-        }
-    },
+            $group : {
+                _id : "$question.assessmenttypeid",
+                heads: {
+                  $push: {
+                    item: "$question.headerid" ,
+                    value: '0'
+                  }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: 'assessmenttypes',
+                localField: '_id',
+                foreignField: '_id',
+                as: 'assessmenttype'
+            }
+        },
+        {
+            $lookup: {
+                from: 'headers',
+                localField: 'heads.item',
+                foreignField: '_id',
+                as: 'header'
+            }
+        },
     ], callback);
 };

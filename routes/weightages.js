@@ -74,4 +74,12 @@ router.delete('/:weightageid', passport.authenticate('jwt', { session: false }),
     }
   });
 });
+
+router.get('/getbyjd/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Weightage.findOne({jdid: req.params.jdid})
+  .then(weightage => {
+    res.json({success: true, data: weightage});
+  })
+  .catch(err => console.log(err));
+});
 module.exports = router;

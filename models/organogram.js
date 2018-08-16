@@ -57,7 +57,7 @@ module.exports.updateOrganogram = function(organogramid, updateResult, callback)
 };
 
 module.exports.getOrganogramById = function(organogramid, callback){
-    Organogram.findById(organogramid, callback);
+    Organogram.findById(organogramid, callback).populate('departmentid').populate('subdepartmentid');
 };
 
 module.exports.deleteOrganogramParent = function(parentid, callback){

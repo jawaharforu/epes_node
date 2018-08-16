@@ -10,25 +10,21 @@ const WeightageSchema = mongoose.Schema({
     },
     weightage: [
       {
-        assessmenttype: [
+        assessmenttypeid: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Assessmenttype',
+          required: [true,'No scale id found']
+        },
+        header: [
           {
-            assessmenttypeid: {
+            headerid: {
               type: mongoose.Schema.Types.ObjectId,
-              ref: 'Assessmenttype',
-              required: [true,'No scale id found']
+              ref: 'Header',
+              required: [true,'No header id found']
             },
-            header: [
-              {
-                headerid: {
-                  type: mongoose.Schema.Types.ObjectId,
-                  ref: 'Header',
-                  required: [true,'No header id found']
-                },
-                weightagerate: {
-                  type: String
-                }
-              }
-            ],
+            weightagerate: {
+              type: String
+            }
           }
         ],
       }
