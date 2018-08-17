@@ -9,6 +9,7 @@ const Assessment = require('../models/assessment');
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldAssessment = {
     title: req.body.title,
+    type: req.body.type,
     periodoftime: req.body.periodoftime,
     duration: req.body.duration,
     duedate: req.body.duedate,
@@ -72,5 +73,13 @@ router.delete('/:assessmentid', passport.authenticate('jwt', { session: false })
       res.json({success: false, msg: 'Assessment not found'});
     }
   });
+});
+
+router.get('/type/:type', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Assessment.find({ $and: [{'companyid': req.user.companyid},{'type' : req.params.type}] })
+  .then(assessment => {
+    res.json({success: true, data: assessment});
+  })
+  .catch(err => console.log(err));
 });
 module.exports = router;

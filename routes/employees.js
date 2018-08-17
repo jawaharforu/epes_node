@@ -11,6 +11,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
       employeenum: req.body.employeenum,
       employeename: req.body.employeename,
       employeetype: req.body.employeetype,
+      experience: req.body.experience,
       designation: req.body.designation,
       email: req.body.email,
       countrycode: req.body.countrycode,

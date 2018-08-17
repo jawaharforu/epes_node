@@ -6,6 +6,9 @@ const AssessmentSchema = mongoose.Schema({
     title: {
         type: String
     },
+    type: {
+        type: String
+    },
     periodoftime: {
         type: String
     },
