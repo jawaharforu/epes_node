@@ -11,7 +11,8 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
     title: req.body.title,
     type: req.body.type,
     periodoftime: req.body.periodoftime,
-    duration: req.body.duration,
+    durationfrom: req.body.durationfrom,
+    durationto: req.body.durationto,
     duedate: req.body.duedate,
     description: req.body.description,
     companyid: req.user.companyid

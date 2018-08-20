@@ -12,7 +12,10 @@ const AssessmentSchema = mongoose.Schema({
     periodoftime: {
         type: String
     },
-    duration: {
+    durationfrom: {
+        type: String
+    },
+    durationto: {
         type: String
     },
     duedate: {
