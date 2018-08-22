@@ -88,4 +88,68 @@ router.get('/getbylevel/:organogramid', passport.authenticate('jwt', { session: 
   .catch(err => console.log(err));
 });
 
+router.post('/authendicate', (req, res, next) => {
+  //res.send('authendicate');
+  const email = req.body.email;
+  const password = req.body.password;
+
+  Employee.getEmployeeByEmailCheck(email, (err, employee) => {
+      if(err) throw err;
+      if(!employee){
+        res.json({success:false, msg: "Employee not found"});
+      } else {
+        let userDetail = {
+            id: employee._id,
+            employeenum: employee.employeenum,
+            employeename: employee.employeename,
+            employeetype: employee.employeetype,
+            experience: employee.experience,
+            designation: employee.designation,
+            email: employee.email,
+            countrycode: employee.countrycode,
+            mobile: employee.mobile,
+            address: employee.address,
+            status: employee.status,
+            organogramid: employee.organogramid,
+            companyid: employee.companyid,
+            role: 'employee',
+        };
+        const token = jwt.sign(userDetail, config.secret, {
+            expiresIn: 604800 // 1 week
+        });
+
+        res.json({
+            success: true,
+            token: 'JWT '+token,
+            user: {
+              id: employee._id,
+              employeenum: employee.employeenum,
+              employeename: employee.employeename,
+              employeetype: employee.employeetype,
+              experience: employee.experience,
+              designation: employee.designation,
+              email: employee.email,
+              countrycode: employee.countrycode,
+              mobile: employee.mobile,
+              address: employee.address,
+              status: employee.status,
+              organogramid: employee.organogramid,
+              companyid: employee.companyid,
+              role: 'employee',
+            }
+        });
+      }
+  });
+});
+
+router.post('/checkuser/email', (req, res, next) => {
+  Employee.findOne({email: req.body.email}).then(employee => {
+    if(!employee){
+      res.json({success:false, msg: "Employee not found"});
+    }else{
+      res.json({success:true, msg: "Employee exist", data: employee});
+    }
+  }).catch(err => res.json(err));
+});
+
 module.exports = router;

@@ -16,7 +16,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
   Weightage.findOne({'jdid': req.body.jdid})
   .then(weightages => {
     if(weightages) {
-      Weightage.updateWeightage(req.body.weightageid, fieldWeightage, (err, weightage) => {
+      Weightage.updateWeightage(req.body.jdid, fieldWeightage, (err, weightage) => {
         if(err) {
           res.json({success: false, msg: 'Failed to update Weightage'});
         } else {
@@ -78,7 +78,11 @@ router.delete('/:weightageid', passport.authenticate('jwt', { session: false }),
 router.get('/getbyjd/:jdid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Weightage.findOne({jdid: req.params.jdid})
   .then(weightage => {
-    res.json({success: true, data: weightage});
+    if (weightage) {
+      res.json({success: true, data: weightage});
+    } else {
+      res.json({success: false, data: weightage});
+    }
   })
   .catch(err => console.log(err));
 });

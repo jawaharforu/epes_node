@@ -73,3 +73,10 @@ module.exports.updateEmployee = function(employeeid, updateResult, callback){
 module.exports.getEmployeeById = function(employeeid, callback){
     Employee.findById(employeeid, callback);
 };
+
+module.exports.getEmployeeByEmailCheck = function(email, callback){
+  const query = {
+      email: email
+  }
+  Employee.findOne(query, callback);
+};

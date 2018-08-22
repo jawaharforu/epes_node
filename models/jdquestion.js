@@ -67,7 +67,7 @@ module.exports.getAssAndHeadByJD = function(jdid, callback) {
             $group : {
                 _id : "$question.assessmenttypeid",
                 heads: {
-                  $push: {
+                  $addToSet: {
                     item: "$question.headerid" ,
                     value: '0'
                   }

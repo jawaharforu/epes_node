@@ -5,7 +5,10 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const multer = require('multer');
 const path = require('path');
-const mammoth = require("mammoth");
+const mammoth = require('mammoth');
+var fs = require('fs');
+// var PDFParser = require('pdf2json');
+var pdfText = require('pdf-text')
 
 const Jd = require('../models/jd');
 
@@ -43,7 +46,7 @@ const upload = multer({
 // Check File Type
 function checkFileType(file, cb){
   // Allowed ext
-  const filetypes = /document|docx/;
+  const filetypes = /document|docx|pdf/;
   // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   // Check mime
@@ -52,8 +55,54 @@ function checkFileType(file, cb){
   if(mimetype && extname){
     return cb(null,true);
   } else {
-    cb('Error: DOCX file Only!');
+    cb('Error: PDF or DOCX file Only!');
   }
+}
+
+function readDoc(filename, res) {
+  mammoth.convertToHtml({path: `${filename}`})
+  .then(function(result){
+      var html = result.value; // The generated HTML
+      var messages = result.messages; // Any messages, such as warnings during conversion
+      return res.json({success: true, msg: 'Imported Successfully', messages: messages, data: html, filename: filename});
+  })
+  .done();
+}
+
+function readPDF(filename, res) {
+
+  pdfText(filename, function(err, chunks) {
+    //chunks is an array of strings
+    //loosely corresponding to text objects within the pdf
+    //for a more concrete example, view the test file in this repo
+  })
+  var buffer = fs.readFileSync(filename)
+  pdfText(buffer, function(err, chunks) {
+   //console.log(chunks)
+   return res.json({success: true, msg: 'Imported Successfully', messages: 'all fine', data: JSON.stringify(chunks), filename: filename});
+  })
+  /*
+  if (fs.existsSync(filename)) {
+    //Read the content of the pdf from the downloaded path
+    var pdfParser = new PDFParser();
+    pdfParser.on("pdfParser_dataError", function (errData) {
+       console.error(errData.parserError)
+    });
+    pdfParser.on("pdfParser_dataReady", pdfData => {
+      //console.log(pdfParser.getAllFieldsTypes());
+      //console.log(pdfParser.getRawTextContent());
+      //console.log(JSON.stringify(pdfData));
+      return res.json({success: true, msg: 'Imported Successfully', messages: 'all fine', data: JSON.stringify(pdfParser.getAllFieldsTypes()), filename: filename});
+    });
+
+    pdfParser.loadPDF(filename);
+  } else {
+    return res.json({success: false, msg: 'Upload Failed!!!', err: err});
+      //console.log('OOPs file not present in the downloaded folder');
+      //Throw an error if the file is not found in the path mentioned
+      //browser.assert.ok(fs.existsSync(pdfFilePath));
+  }
+  */
 }
 
 router.post('/upload', (req, res, next) => {
@@ -63,13 +112,12 @@ router.post('/upload', (req, res, next) => {
          return;
     }
     var filename = req.file.path; // parses a file
-    mammoth.convertToHtml({path: `${filename}`})
-    .then(function(result){
-        var html = result.value; // The generated HTML
-        var messages = result.messages; // Any messages, such as warnings during conversion
-        res.json({success: true, msg: 'Imported Successfully', messages: messages, data: html, filename: filename});
-    })
-    .done();
+    var filetype = filename.split('.').pop();
+    if(filetype === 'docx') {
+      return readDoc(filename, res);
+    } else if(filetype === 'pdf') {
+      return readPDF(filename, res);
+    }
   });
 });
 

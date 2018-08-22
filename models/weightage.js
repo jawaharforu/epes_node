@@ -54,8 +54,8 @@ module.exports.deleteWeightage = function(Weightageid, callback){
   Weightage.remove({_id: Weightageid}, callback);
 };
 
-module.exports.updateWeightage = function(Weightageid, updateResult, callback){
-  Weightage.update({_id: Weightageid},updateResult, callback);
+module.exports.updateWeightage = function(jdid, updateResult, callback){
+  Weightage.update({jdid: jdid},updateResult, callback);
 };
 
 module.exports.getWeightageById = function(Weightageid, callback){
