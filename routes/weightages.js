@@ -39,6 +39,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res, ne
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   Weightage.find({companyid: req.user.companyid})
+  .populate('jdid')
   .then(weightage => {
     res.json({success: true, data: weightage});
   })
