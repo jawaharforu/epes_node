@@ -9,7 +9,7 @@ const SubscriptionSchema = mongoose.Schema({
         required: [true,'No Company id found']
     },
     extraemployees: {
-        type: String
+        type: Number
     },
     companyid: {
         type: mongoose.Schema.Types.ObjectId,

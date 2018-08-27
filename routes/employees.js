@@ -5,6 +5,11 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
 const Employee = require('../models/employee');
+const Organogram = require('../models/organogram');
+const mongoose = require('mongoose');
+const Jdtoemployee = require('../models/jdtoemployee');
+const Jdquestion = require('../models/jdquestion');
+const Question = require('../models/question');
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
   let fieldEmployee = {
@@ -150,6 +155,96 @@ router.post('/checkuser/email', (req, res, next) => {
       res.json({success:true, msg: "Employee exist", data: employee});
     }
   }).catch(err => res.json(err));
+});
+
+router.get('/get/sublevel/:employeeid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Employee.getEmployeeById(req.params.employeeid, (err, employee) => {
+    if (employee) {
+      Organogram.findById(employee.organogramid)
+      .then(organogram => {
+        if (organogram) {
+          Organogram.find({parentid: organogram.uniqueid})
+          .then(childorganogram => {
+            Employee.find({
+              "organogramid" : {
+                "$in" : childorganogram.map(item => {
+                  return mongoose.Types.ObjectId(item._id);
+                })
+               }
+            })
+            .then(childemployees => {
+              Jdtoemployee.find({employeeid: { "$in" : childemployees.map(item => {
+                return mongoose.Types.ObjectId(item._id);
+              })
+              } })
+              .then(jds => {
+                Jdquestion.find({jdid: jds[0].jdid})
+                .populate({path: 'questionid', populate: [{path: 'scaleid'},{path: 'assessmenttypeid'},{path: 'headerid'}]})
+                .then(jdquestion => {
+                  res.json({success: true, data: jdquestion});
+                })
+                .catch(err => console.log(err));
+              })
+              .catch(err => console.log(err));
+            })
+            .catch(err => console.log(err));
+          })
+          .catch(err => console.log(err));
+        } else {
+          res.json({success: false, msg: 'Employee not found'});
+        }
+      })
+      .catch(err => console.log(err));
+    } else {
+      res.json({success: false, msg: 'Employee not found'});
+    }
+  });
+});
+
+router.get('/get/highlevel/:employeeid', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  Employee.getEmployeeById(req.params.employeeid, (err, employee) => {
+    if (employee) {
+      Organogram.findById(employee.organogramid)
+      .then(organogram => {
+        if (organogram) {
+          Organogram.find({uniqueid: organogram.parentid})
+          .then(childorganogram => {
+            Employee.find({
+              "organogramid" : {
+                "$in" : childorganogram.map(item => {
+                  return mongoose.Types.ObjectId(item._id);
+                })
+               }
+            })
+            .then(childemployees => {
+              console.log(childemployees);
+              Jdtoemployee.find({employeeid: { "$in" : childemployees.map(item => {
+                return mongoose.Types.ObjectId(item._id);
+              })
+              } })
+              .populate('employeeid')
+              .then(jds => {
+                Jdquestion.find({jdid: jds[0].jdid}, {$set:{"emp":jds[0].employeeid}})
+                .populate({path: 'questionid', populate: [{path: 'scaleid'},{path: 'assessmenttypeid'},{path: 'headerid'}]})
+                .then(jdquestion => {
+                  res.json({success: true, data: jdquestion});
+                })
+                .catch(err => console.log(err));
+              })
+              .catch(err => console.log(err));
+            })
+            .catch(err => console.log(err));
+          })
+          .catch(err => console.log(err));
+        } else {
+          res.json({success: false, msg: 'Employee not found'});
+        }
+      })
+      .catch(err => console.log(err));
+    } else {
+      res.json({success: false, msg: 'Employee not found'});
+    }
+  });
 });
 
 module.exports = router;
